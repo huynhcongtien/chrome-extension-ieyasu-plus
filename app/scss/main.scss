@@ -1,0 +1,65 @@
+/*.workTable tr:hover td {
+    background: #a0a0a0;
+}*/
+.cellTime, .tableNormal tr:hover td {
+    &.is-change {
+        background: #ce6e6e;
+        .item01 {
+            color: #fff;
+        }
+        .item02 {
+            color: #000;
+        }
+    }
+    &.not-change {
+        background: #b9d6b9;
+    }
+}
+.miss-approval, .tableNormal tr.miss-approval:hover {
+    .cellMemo {
+        background: #ce6e6e;
+        div:first-child {
+            color: #fff;
+        }
+        .red {
+            color: #ffff00;
+        }
+    }
+}
+.is-approval, .tableNormal tr.is-approval:hover {
+    .cellMemo {
+        background: #b9d6b9;
+    }
+}
+.time-full, .tableNormal tr:hover td.time-full {
+    background: #b9d6b9;
+}
+.time-not-full, .tableNormal tr:hover td.time-not-full {
+    background: #ce6e6e;
+}
+.cellTimeNum {
+    position: relative;
+    .buttons {
+        position: absolute;
+        top: 3px;
+        width: 65px;
+        left: 5px;
+        letter-spacing: normal;
+        a {
+            letter-spacing: normal;
+            margin: 0;
+        }
+    }
+}
+.approval-all {
+    background: #ef7709;
+    padding: 0 15px;
+    top: 0;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    &.fixed {
+        position: fixed;
+        left: 23px;
+    }
+}

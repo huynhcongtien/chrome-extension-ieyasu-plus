@@ -1,0 +1,39 @@
+{
+  "name": "chrome-extension-chatwork-to-markdown",
+  "version": "0.0.1",
+  "description": "Render chatwork HTML to markdown",
+  "main": "app/manifest.json",
+  "homepage": "https://github.com/huynhcongtien/chrome-extension-chatwork-to-markdown",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huynhcongtien/chrome-extension-chatwork-to-markdown.git"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1"
+  },
+  "devDependencies": {
+    "grunt": "~1.0.1",
+    "grunt-contrib-clean": "~1.0.0",
+    "grunt-contrib-compress": "^1.4.3",
+    "grunt-contrib-copy": "~1.0.0",
+    "grunt-contrib-csslint": "^2.0.0",
+    "grunt-contrib-cssmin": "^1.0.0",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-uglify": "~1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "load-grunt-tasks": "^3.5.2",
+    "time-grunt": "^1.4.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Huynh Cong Tien",
+    "email": "congtien2705@gmail.com",
+    "url": "https://github.com/huynhcongtien"
+  },
+  "license": "MIT"
+}
