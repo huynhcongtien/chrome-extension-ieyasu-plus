@@ -13,6 +13,17 @@
 .cellTime.not-change, .tableNormal tr:hover td.not-change {
   background: #b9d6b9;
 }
+.cellTime.is-late, .tableNormal tr:hover td.is-late {
+  background: #dbc626;
+}
+.cellTime.is-early, .tableNormal tr:hover td.is-early {
+  background: #6c610e;
+  color: #fff;
+}
+
+.cellType.warning, .tableNormal tr:hover td.warning {
+  background: #ce9425;
+}
 
 .miss-approval .cellMemo, .tableNormal tr.miss-approval:hover .cellMemo {
   background: #ce6e6e;

@@ -14,6 +14,18 @@
     &.not-change {
         background: #b9d6b9;
     }
+    &.is-late {
+        background: #dbc626;
+    }
+    &.is-early {
+        background: #6c610e;
+        color: #fff;
+    }
+}
+.cellType, .tableNormal tr:hover td {
+    &.warning {
+        background: #ce9425;
+    }
 }
 .miss-approval, .tableNormal tr.miss-approval:hover {
     .cellMemo {
