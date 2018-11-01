@@ -1,10 +1,28 @@
-node_modules
-temp
-.tmp
-dist
-.sass-cache
-app/bower_components
-test/bower_components
-package
+*~
+*.bak
+*.log
+*.swp
+*.tmp
 
-/nbproject/
+# Bower, Composer, Node, Sass
+bower_components
+vendor/
+node_modules
+npm-debug.log*
+.sass-cache/
+.tmp/
+*.css.map
+
+# Eclipse, NetBeans, PhpStorm, SublimeText
+.project
+.buildpath
+.settings/
+nbproject/
+.idea/
+*.cache
+*.sublime-*
+
+# OS
+._*
+.DS_Store
+Thumbs.db
