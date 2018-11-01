@@ -23,7 +23,8 @@ module.exports = function () {
                     cwd    : 'node_modules',
                     dest   : '<%= theme.build %>/js/',
                     src    : [
-                        'jquery/dist/jquery.js'
+                        'jquery/dist/jquery.js',
+                        'moment/min/moment.min.js'
                     ]
                 },
                 {

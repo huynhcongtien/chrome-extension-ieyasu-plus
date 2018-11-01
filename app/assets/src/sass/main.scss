@@ -14,10 +14,7 @@
     &.not-change {
         background: #b9d6b9;
     }
-    &.is-late {
-        background: #dbc626;
-    }
-    &.is-early {
+    &.is-late, &.is-early {
         background: #6c610e;
         color: #fff;
     }
@@ -48,6 +45,7 @@
 }
 .time-not-full, .tableNormal tr:hover td.time-not-full {
     background: #ce6e6e;
+    color: #fff;
 }
 .cellTimeNum {
     position: relative;

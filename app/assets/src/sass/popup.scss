@@ -1,7 +1,18 @@
-.sample {
+.head {
+    display: inline-block;
+    width: 100%;
+    img, .title {
+        float: left;
+    }
+    .title {
+        margin: 0 0 0 10px;
+        line-height: 38px;
+    }
+}
+.author {
     background-color: #447BBC;
     color: #fff;
     font-size: 14px;
     padding: 5px;
-    cursor: pointer;
+    white-space: nowrap;
 }

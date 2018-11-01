@@ -15,7 +15,11 @@
         ]
     },
     "permissions": [
-        "https://ieyasu.co/*"
+        "https://ieyasu.co/*",
+        "alarms",
+        "notifications",
+        "background",
+        "storage"
     ],
     "content_scripts": [
         {
@@ -37,6 +41,7 @@
             "19": "assets/dist/img/icon-19.png",
             "38": "assets/dist/img/icon-38.png"
         },
-        "default_title": "Ieyasu Plus"
+        "default_title": "Ieyasu Plus",
+        "default_popup": "pages/popup.html"
     }
 }

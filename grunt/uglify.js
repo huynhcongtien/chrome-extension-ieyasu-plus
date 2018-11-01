@@ -16,8 +16,8 @@ module.exports = function () {
         main      : {
             files: {
                 '<%= theme.dist %>/js/main.min.js': [
-                    '<%= theme.src %>/js/jquery-1.8.0.min.js',
-                    '<%= theme.src %>/js/markdown-it.min.js',
+                    '<%= theme.build %>/js/jquery.js',
+                    '<%= theme.build %>/js/moment.min.js',
                     '<%= theme.src %>/js/contentscript.js'
                 ]
             }
@@ -34,7 +34,6 @@ module.exports = function () {
             files: {
                 '<%= theme.dist %>/js/sample.min.js': [
                     '<%= theme.build %>/js/jquery.js',
-                    '<%= theme.src %>/js/markdown-it.min.js',
                     '<%= theme.src %>/js/sample.js'
                 ]
             }
@@ -42,6 +41,8 @@ module.exports = function () {
         background: {
             files: {
                 '<%= theme.dist %>/js/background.min.js': [
+                    '<%= theme.build %>/js/jquery.js',
+                    '<%= theme.build %>/js/moment.min.js',
                     '<%= theme.src %>/js/background.js'
                 ]
             }

@@ -130,4 +130,19 @@ $(function () {
         });
     }
 
+    // save check-in/checkout time to storage
+    $('#stamping').on('click', '#btnIN1.ON', function () {
+        var checkInTime = moment();
+        chrome.storage.sync.set({checkInTime: checkInTime}, function () {
+            console.log('Check-in time:' + checkInTime);
+        });
+    }).on('click', '#btnIN2.ON', function () {
+        var checkOutTime = moment();
+        chrome.storage.sync.set({checkOutTime: checkOutTime}, function () {
+            console.log('Checkout time:' + checkOutTime);
+        });
+    });
+
+
+
 });
