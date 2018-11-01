@@ -13,6 +13,12 @@ module.exports = function (grunt) {
             options: {
                 questions: [
                     {
+                        config : 'bump.prompt.isUpdateVersion',
+                        type   : 'confirm',
+                        message: 'Do you want to update the version?',
+                        default: false
+                    },
+                    {
                         config : 'bump.prompt.increment',
                         type   : 'list',
                         message: 'Bump version from ' + '<%= pkg.version %>' + ' to:',
@@ -37,7 +43,10 @@ module.exports = function (grunt) {
                                 value: 'custom',
                                 name : 'Custom: ?.?.? Specify version...'
                             }
-                        ]
+                        ],
+                        when   : function (answers) {
+                            return answers['bump.prompt.isUpdateVersion'] === true;
+                        }
                     },
                     {
                         config : 'bump.prompt.incrementBuild',
@@ -66,7 +75,10 @@ module.exports = function (grunt) {
                             }
                         ],
                         when   : function (answers) {
-                            return answers['bump.prompt.increment'] === 'build';
+                            return (
+                                answers['bump.prompt.isUpdateVersion'] === true &&
+                                answers['bump.prompt.increment'] === 'build'
+                            );
                         }
                     },
                     {
@@ -85,7 +97,10 @@ module.exports = function (grunt) {
                         config : 'bump.prompt.useDefaults',
                         type   : 'confirm',
                         message: 'Use default values ([config/mastack | .mastack/src]/grunt/actions/bump.js) ?',
-                        default: false
+                        default: false,
+                        when   : function (answers) {
+                            return answers['bump.prompt.isUpdateVersion'] === true;
+                        }
                     },
                     {
                         config : 'bump.prompt.files',
@@ -119,6 +134,9 @@ module.exports = function (grunt) {
                     }
                 ],
                 then     : function (results) {
+                    if (!results['bump.prompt.isUpdateVersion']) {
+                        return;
+                    }
                     // resetting options of bump task
                     if (results['bump.prompt.useDefaults'] === false) {
                         grunt.config.data.bump.options.files       = results['bump.prompt.files'];
@@ -126,6 +144,7 @@ module.exports = function (grunt) {
                         grunt.config.data.bump.options.commit      = results['bump.prompt.isCommit'];
                     }
 
+                    // update version
                     switch (results['bump.prompt.increment']) {
                         case 'custom':
                             grunt.task.run(
@@ -143,6 +162,7 @@ module.exports = function (grunt) {
                             grunt.task.run('bump-only:' + results['bump.prompt.increment']);
                             break;
                     }
+
 
                     grunt.task.run([
                         //'changelog',

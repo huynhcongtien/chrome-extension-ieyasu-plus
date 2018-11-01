@@ -25,7 +25,7 @@
     "node": true,
     "worker": true,
     "globals": {
-        "hljs": true,
+        "moment": true,
         "chrome": true
     },
     "esversion": 6

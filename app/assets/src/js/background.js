@@ -8,8 +8,8 @@ console.log('\'Allo \'Allo! Event Page for Browser Action');
 chrome.runtime.onInstalled.addListener(function (details) {
     console.log('previousVersion', details.previousVersion);
 
-    chrome.storage.sync.get('workTimeEnd', function (workTimeEnd) {
-        if (!workTimeEnd) {
+    chrome.storage.sync.get(['workTimeEnd'], function (result) {
+        if (!result.workTimeEnd) {
             var workTimeEnd = '19:00:00';
             chrome.storage.sync.set({workTimeEnd: workTimeEnd}, function () {
                 console.log('Value is set to ' + workTimeEnd);
@@ -19,31 +19,6 @@ chrome.runtime.onInstalled.addListener(function (details) {
 });
 
 //chrome.browserAction.setBadgeText({text: 'Notice'});
-
-// add notification for checkout
-var noticeCheckOut = function () {
-    var opt = {
-        type              : 'basic',
-        title             : 'Lampart',
-        message           : 'End of working hours. Checkout! :)',
-        iconUrl           : '../assets/dist/img/icon-128.png',
-        buttons           : [
-            {
-                title: 'Agree'
-            },
-            {
-                title: 'Close'
-            }
-        ],
-        requireInteraction: true
-    };
-
-    chrome.notifications.create('warningCheckOut', opt, function (id) {
-        if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError.message);
-        }
-    });
-}
 
 // add notification for check-in
 var noticeCheckIn = function () {
@@ -65,31 +40,58 @@ var noticeCheckIn = function () {
 
     chrome.notifications.create('warningCheckIn', opt, function (id) {
         if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError.message);
+            console.error(id + ':' + chrome.runtime.lastError.message);
         }
     });
-}
+};
+
+// add notification for checkout
+var noticeCheckOut = function () {
+    var opt = {
+        type              : 'basic',
+        title             : 'Lampart',
+        message           : 'End of working hours. Checkout! :)',
+        iconUrl           : '../assets/dist/img/icon-128.png',
+        buttons           : [
+            {
+                title: 'Agree'
+            },
+            {
+                title: 'Close'
+            }
+        ],
+        requireInteraction: true
+    };
+
+    chrome.notifications.create('warningCheckOut', opt, function (id) {
+        if (chrome.runtime.lastError) {
+            console.error(id + ':' + chrome.runtime.lastError.message);
+        }
+    });
+};
 
 // check check-in
-chrome.storage.sync.get('checkInTime', function (checkInTime) {
-    if (!checkInTime || checkInTime.format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD')) {
+chrome.storage.sync.get(['checkInTime'], function (result) {
+    if (!result.checkInTime || result.checkInTime.format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD')) {
         noticeCheckIn();
     }
 });
 
 // check check-out
-chrome.storage.sync.get('checkOutTime', function (checkOutTime) {
-    chrome.storage.sync.get('checkInTime', function (checkInTime) {
-        var checkInTime = checkInTime;
-        
-        console.log(checkInTime);
-    });
+chrome.storage.sync.get(['checkOutTime'], function (resultCheckOut) {
+    chrome.storage.sync.get(['checkInTime'], function (resultCheckIn) {
+        // not check-in
+        if (!resultCheckIn.checkInTime) {
+            return;
+        }
 
-    if (moment().format('HH:mm:ss') > checkOutTime.format('HH:mm:ss')
-        && (!checkOutTime || checkOutTime.format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD'))
-    ) {
-        noticeCheckIn();
-    }
+        // not check out in today
+        if (!resultCheckOut.checkOutTime ||
+            resultCheckOut.checkOutTime.format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD')
+        ) {
+            noticeCheckOut();
+        }
+    });
 });
 
 // open link checkout
@@ -104,15 +106,16 @@ var date    = new Date(),
 
 // only show notification in workdays
 if (weekday > 0 && weekday < 6) {
-    var now         = moment(),
-        workEndTime = moment().format('YYYY:MM:DD 17:48:40');
-    // workEndTime = moment().format('YYYY:MM:DD ' + workTimeEnd);
+    chrome.storage.sync.get(['workTimeEnd'], function (result) {
+        var now         = moment(),
+            workEndTime = moment().format('YYYY:MM:DD ' + result.workTimeEnd);
 
-    var ms = moment(workEndTime, 'YYYY:MM:DD HH:mm:ss').diff(now);
+        var ms = moment(workEndTime, 'YYYY:MM:DD HH:mm:ss').diff(now);
 
-    if (ms > 0) {
-        setTimeout(noticeCheckOut, ms);
-    }
+        if (ms > 0) {
+            setTimeout(noticeCheckOut, ms);
+        }
+    });
 }
 
 // chrome.tabs.onRemoved.addListener(function (tabid, removed) {

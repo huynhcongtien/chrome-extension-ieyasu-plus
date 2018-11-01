@@ -10,8 +10,8 @@ $(function () {
             var cellTimeList = ['.cellTime01', '.cellTime02'];
 
             // check check-in/check-out time
-            cellTimeList.forEach(function (cellTime) {
-                var cellTime = $(tr).find(cellTime);
+            cellTimeList.forEach(function (cellTimeElement) {
+                var cellTime = $(tr).find(cellTimeElement);
 
                 if (!cellTime.find('.item02').length) {
                     return;
