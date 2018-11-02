@@ -9,12 +9,16 @@ chrome.runtime.onInstalled.addListener(function (details) {
     console.log('previousVersion', details.previousVersion);
 
     chrome.storage.sync.get(['workTimeEnd'], function (result) {
-        if (!result.workTimeEnd) {
-            var workTimeEnd = '19:00:00';
-            chrome.storage.sync.set({workTimeEnd: workTimeEnd}, function () {
-                console.log('Value is set to ' + workTimeEnd);
-            });
+        if (result.workTimeEnd) {
+            console.log('Working time end: ' + result.workTimeEnd);
+            return;
         }
+
+        // save working time end if not set
+        var workTimeEnd = '19:00:00';
+        chrome.storage.sync.set({workTimeEnd: workTimeEnd}, function () {
+            console.log('Value is set to ' + workTimeEnd);
+        });
     });
 });
 
@@ -29,7 +33,7 @@ var noticeCheckIn = function () {
         iconUrl           : '../assets/dist/img/icon-128.png',
         buttons           : [
             {
-                title: 'Agree'
+                title: 'Open the site'
             },
             {
                 title: 'Close'
@@ -54,7 +58,7 @@ var noticeCheckOut = function () {
         iconUrl           : '../assets/dist/img/icon-128.png',
         buttons           : [
             {
-                title: 'Agree'
+                title: 'Open the site'
             },
             {
                 title: 'Close'
@@ -70,53 +74,79 @@ var noticeCheckOut = function () {
     });
 };
 
-// check check-in
+var isWorkingDate = function () {
+    var date    = new Date(),
+        weekday = date.getDay();
+
+    // set notification checkout only workdays: 1 to 5 is Monday to Friday
+    if (weekday === 0 || weekday > 5) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Check check-in
+ */
 chrome.storage.sync.get(['checkInTime'], function (result) {
-    if (!result.checkInTime || result.checkInTime.format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD')) {
+    if (!isWorkingDate()) {
+        return;
+    }
+
+    if (!result.checkInTime ||
+        moment(result.checkInTime, 'x').format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD')
+    ) {
         noticeCheckIn();
     }
 });
 
-// check check-out
-chrome.storage.sync.get(['checkOutTime'], function (resultCheckOut) {
-    chrome.storage.sync.get(['checkInTime'], function (resultCheckIn) {
-        // not check-in
-        if (!resultCheckIn.checkInTime) {
-            return;
-        }
+/**
+ * Check check-out
+ */
+chrome.storage.sync.get(['checkInTime', 'checkOutTime', 'workTimeEnd'], function (result) {
+    // not is working date or check-in
+    if (!isWorkingDate()) {
+        return;
+    }
 
-        // not check out in today
-        if (!resultCheckOut.checkOutTime ||
-            resultCheckOut.checkOutTime.format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD')
-        ) {
-            noticeCheckOut();
-        }
-    });
+    // not check out in today
+    if (!result.checkOutTime ||
+        (moment(result.checkOutTime, 'x').format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD') &&
+            moment().format('HH:mm:ss') > result.workTimeEnd
+        )
+    ) {
+        noticeCheckOut();
+    }
 });
 
-// open link checkout
+/**
+ * Open link checkout
+ */
 chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
     if (buttonIndex === 0) {
         chrome.tabs.create({url: 'https://ieyasu.co/timestamp'});
     }
 });
 
-var date    = new Date(),
-    weekday = date.getDay();
+/**
+ * Set notification checkout only workdays
+ */
+chrome.storage.sync.get(['workTimeEnd'], function (result) {
+    if (!isWorkingDate()) {
+        return;
+    }
 
-// only show notification in workdays
-if (weekday > 0 && weekday < 6) {
-    chrome.storage.sync.get(['workTimeEnd'], function (result) {
-        var now         = moment(),
-            workEndTime = moment().format('YYYY:MM:DD ' + result.workTimeEnd);
+    var now         = moment(),
+        workEndTime = moment().format('YYYY:MM:DD ' + result.workTimeEnd);
 
-        var ms = moment(workEndTime, 'YYYY:MM:DD HH:mm:ss').diff(now);
+    var ms = moment(workEndTime, 'YYYY:MM:DD HH:mm:ss').diff(now);
 
-        if (ms > 0) {
-            setTimeout(noticeCheckOut, ms);
-        }
-    });
-}
+    if (ms > 0) {
+        setTimeout(noticeCheckOut, ms);
+    }
+});
+
 
 // chrome.tabs.onRemoved.addListener(function (tabid, removed) {
 //     alert("tab closed");

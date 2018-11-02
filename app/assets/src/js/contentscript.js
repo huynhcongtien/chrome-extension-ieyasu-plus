@@ -132,12 +132,12 @@ $(function () {
 
     // save check-in/checkout time to storage
     $('#stamping').on('click', '#btnIN1.ON', function () {
-        var checkInTime = moment();
+        var checkInTime = +moment(); // Unix Millisecond Timestamp
         chrome.storage.sync.set({checkInTime: checkInTime}, function () {
             console.log('Check-in time:' + checkInTime);
         });
     }).on('click', '#btnIN2.ON', function () {
-        var checkOutTime = moment();
+        var checkOutTime = +moment(); // Unix Millisecond Timestamp
         chrome.storage.sync.set({checkOutTime: checkOutTime}, function () {
             console.log('Checkout time:' + checkOutTime);
         });
