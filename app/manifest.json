@@ -10,7 +10,8 @@
     "default_locale": "en",
     "background": {
         "scripts": [
-            "assets/dist/js/background.min.js"
+            "assets/dist/js/background.min.js",
+            "assets/src/js/chromereload.js"
         ]
     },
     "permissions": [

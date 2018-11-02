@@ -101,6 +101,8 @@ chrome.storage.sync.get(['checkInTime'], function (result) {
     }
 });
 
+// console.log(moment.tz.guess());
+
 /**
  * Check check-out
  */
@@ -143,6 +145,7 @@ chrome.storage.sync.get(['workTimeEnd'], function (result) {
     var ms = moment(workEndTime, 'YYYY:MM:DD HH:mm:ss').diff(now);
 
     if (ms > 0) {
+        console.log('Notification checkout at: ' + moment(ms, 'x').format('YYYY:MM:DD HH:mm:ss'));
         setTimeout(noticeCheckOut, ms);
     }
 });
