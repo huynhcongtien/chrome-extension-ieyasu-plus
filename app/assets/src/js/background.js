@@ -28,7 +28,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
 var noticeCheckIn = function () {
     var opt = {
         type              : 'basic',
-        title             : 'Lampart',
+        title             : 'Ieyasu Plus',
         message           : 'Begin of working hours. Check-in! :)',
         iconUrl           : '../assets/dist/img/icon-128.png',
         buttons           : [
@@ -53,7 +53,7 @@ var noticeCheckIn = function () {
 var noticeCheckOut = function () {
     var opt = {
         type              : 'basic',
-        title             : 'Lampart',
+        title             : 'Ieyasu Plus',
         message           : 'End of working hours. Checkout! :)',
         iconUrl           : '../assets/dist/img/icon-128.png',
         buttons           : [

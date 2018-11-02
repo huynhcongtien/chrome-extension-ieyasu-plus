@@ -1,6 +1,6 @@
 {
   "name": "chrome-extension-ieyasu-plus",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Checking support when approve",
   "main": "app/manifest.json",
   "homepage": "https://github.com/huynhcongtien/chrome-extension-ieyasu-plus",
