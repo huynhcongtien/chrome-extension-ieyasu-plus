@@ -26,7 +26,8 @@
     "worker": true,
     "globals": {
         "moment": true,
-        "chrome": true
+        "chrome": true,
+        "Vue": true
     },
     "esversion": 6
 }

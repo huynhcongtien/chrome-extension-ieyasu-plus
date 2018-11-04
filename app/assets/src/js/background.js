@@ -8,17 +8,28 @@ console.log('\'Allo \'Allo! Event Page for Browser Action');
 chrome.runtime.onInstalled.addListener(function (details) {
     console.log('previousVersion', details.previousVersion);
 
-    chrome.storage.sync.get(['workTimeEnd'], function (result) {
-        if (result.workTimeEnd) {
-            console.log('Working time end: ' + result.workTimeEnd);
-            return;
+    chrome.storage.sync.get(['workTimeStart', 'workTimeEnd'], function (result) {
+        // setting start time working days
+        if (result.workTimeStart) {
+            console.log('Working time start: ' + result.workTimeStart);
+        } else {
+            // save working time end if not set
+            var workTimeStart = '08:00:00';
+            chrome.storage.sync.set({workTimeStart: workTimeStart}, function () {
+                console.log('Value of working start is set to: ' + workTimeStart);
+            });
         }
 
-        // save working time end if not set
-        var workTimeEnd = '19:00:00';
-        chrome.storage.sync.set({workTimeEnd: workTimeEnd}, function () {
-            console.log('Value is set to ' + workTimeEnd);
-        });
+        // setting end time working days
+        if (result.workTimeEnd) {
+            console.log('Working time end: ' + result.workTimeEnd);
+        } else {
+            // save working time end if not set
+            var workTimeEnd = '17:00:00';
+            chrome.storage.sync.set({workTimeEnd: workTimeEnd}, function () {
+                console.log('Value of working end is set to: ' + workTimeEnd);
+            });
+        }
     });
 });
 
@@ -84,7 +95,7 @@ var isWorkingDate = function () {
     }
 
     return true;
-}
+};
 
 /**
  * Check check-in

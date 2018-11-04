@@ -30,11 +30,15 @@ module.exports = function () {
                 ]
             }
         },
-        sample    : {
+        setting   : {
             files: {
-                '<%= theme.dist %>/js/sample.min.js': [
+                '<%= theme.dist %>/js/setting.min.js': [
                     '<%= theme.build %>/js/jquery.js',
-                    '<%= theme.src %>/js/sample.js'
+                    '<%= theme.build %>/js/bootstrap.min.js',
+                    '<%= theme.build %>/js/moment.min.js',
+                    '<%= theme.build %>/js/bootstrap-datetimepicker.js',
+                    '<%= theme.build %>/js/vue.min.js',
+                    '<%= theme.src %>/js/setting.js'
                 ]
             }
         },

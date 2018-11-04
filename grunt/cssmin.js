@@ -18,14 +18,15 @@ module.exports = function () {
         popup  : {
             dest: '<%= theme.dist %>/css/popup.min.css',
             src : [
+                '<%= theme.build %>/css/bootstrap.css',
                 '<%= theme.build %>/css/popup.css'
             ]
         },
-        sample : {
-            dest: '<%= theme.dist %>/css/sample.min.css',
+        setting: {
+            dest: '<%= theme.dist %>/css/setting.min.css',
             src : [
                 '<%= theme.build %>/css/bootstrap.css',
-                '<%= theme.build %>/css/sample.css'
+                '<%= theme.build %>/css/setting.css'
             ]
         }
     };

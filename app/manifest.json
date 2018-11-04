@@ -14,6 +14,7 @@
             "assets/src/js/chromereload.js"
         ]
     },
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
         "https://ieyasu.co/*",
         "alarms",

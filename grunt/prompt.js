@@ -163,7 +163,6 @@ module.exports = function (grunt) {
                             break;
                     }
 
-
                     grunt.task.run([
                         //'changelog',
                         'bump-commit'

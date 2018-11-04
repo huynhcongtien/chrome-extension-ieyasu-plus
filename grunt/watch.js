@@ -9,21 +9,66 @@ module.exports = function () {
         options      : {
             livereload: 35729
         },
-        css          : {
+        css_main     : {
             files: [
-                '<%= theme.build %>/css/style.css'
+                '<%= theme.build %>/css/main.css'
+            ],
+            tasks: [
+                'cssmin:main'
             ]
         },
-        sass         : {
+        css_popup    : {
+            files: [
+                '<%= theme.build %>/css/popup.css'
+            ],
+            tasks: [
+                'cssmin:popup'
+            ]
+        },
+        css_setting  : {
+            files: [
+                '<%= theme.build %>/css/setting.css'
+            ],
+            tasks: [
+                'cssmin:setting'
+            ]
+        },
+        sass_main    : {
             files  : [
-                '<%= theme.src %>/sass/*.scss'
+                '<%= theme.src %>/sass/main.scss'
             ],
             options: {
                 livereload: false
             },
             tasks  : [
-                'sass',
-                'cssmin',
+                'sass:main',
+                'cssmin:main',
+                'notify:watch_sass'
+            ]
+        },
+        sass_popup   : {
+            files  : [
+                '<%= theme.src %>/sass/popup.scss'
+            ],
+            options: {
+                livereload: false
+            },
+            tasks  : [
+                'sass:popup',
+                'cssmin:popup',
+                'notify:watch_sass'
+            ]
+        },
+        sass_setting : {
+            files  : [
+                '<%= theme.src %>/sass/setting.scss'
+            ],
+            options: {
+                livereload: false
+            },
+            tasks  : [
+                'sass:setting',
+                'cssmin:setting',
                 'notify:watch_sass'
             ]
         },
@@ -45,12 +90,12 @@ module.exports = function () {
                 'notify:watch_js'
             ]
         },
-        js_sample    : {
+        js_setting   : {
             files: [
-                '<%= theme.src %>/js/sample.js'
+                '<%= theme.src %>/js/setting.js'
             ],
             tasks: [
-                'uglify:sample',
+                'uglify:setting',
                 'notify:watch_js'
             ]
         },

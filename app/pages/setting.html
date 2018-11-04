@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Ieyasu Plus Options</title>
+        <link href="../assets/dist/css/setting.min.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="container" id="app">
+            <header>
+                <img src="../assets/dist/img/icon-38.png"/>
+                <strong><span class="title">Ieyasu Plus</span></strong>
+                Setting page
+            </header>
+
+            <hr/>
+
+            <div class="option-list">
+                <form>
+                    <div class="form-group row">
+                        <label for="work-time-start" class="col-sm-3 col-form-label">
+                            Start time working days
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control datetime-picker" id="work-time-start"
+                                v-model="workTimeStart"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="work-time-end" class="col-sm-3 col-form-label">
+                            End time working days
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control datetime-picker" id="work-time-end"
+                                v-model="workTimeEnd"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-3">
+                            <button type="button" class="btn btn-primary" v-on:click="saveSetting">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script src="../assets/dist/js/setting.min.js"></script>
+    </body>
+</html>

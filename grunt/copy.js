@@ -23,8 +23,11 @@ module.exports = function () {
                     cwd    : 'node_modules',
                     dest   : '<%= theme.build %>/js/',
                     src    : [
+                        'bootstrap/dist/js/bootstrap.min.js',
                         'jquery/dist/jquery.js',
-                        'moment/min/moment.min.js'
+                        'moment/min/moment.min.js',
+                        'vue/dist/vue.min.js',
+                        'bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'
                     ]
                 },
                 {

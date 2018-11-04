@@ -1,3 +1,6 @@
+body {
+    padding: 10px;
+}
 .head {
     display: inline-block;
     width: 100%;
@@ -7,10 +10,31 @@
     .title {
         margin: 0 0 0 10px;
         line-height: 38px;
+        font-weight: bold;
+    }
+}
+.menu {
+    padding: 0;
+    margin: 15px 0;
+    li {
+        background-color: #e9e1de;
+        display: inline-block;
+        padding: 3px;
+        font-size: 14px;
+        border: 1px solid #cec4ba;
+        &:hover {
+            cursor: pointer;
+            background-color: #dcc8c1;
+            transition: all 0.2s;
+        }
+        a {
+            color: #333;
+            text-decoration: none;
+        }
     }
 }
 .author {
-    background-color: #447BBC;
+    background-color: #5e3b1b;
     color: #fff;
     font-size: 14px;
     padding: 5px;

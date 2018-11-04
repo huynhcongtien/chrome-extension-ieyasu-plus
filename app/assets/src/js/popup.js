@@ -1,9 +1,11 @@
 'use strict';
 
-$(function() {
+$(function () {
 
-    $('.sample').click(function() {
-        var samplePage = chrome.extension.getURL('pages/sample.html');
+    $('a[data-href]').click(function () {
+        var link       = $(this).data('href'),
+            samplePage = chrome.extension.getURL(link);
+
         window.open(samplePage, '_blank');
     });
 
