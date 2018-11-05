@@ -100,8 +100,8 @@ var isWorkingDate = function () {
 /**
  * Check check-in
  */
-chrome.storage.sync.get(['checkInTime'], function (result) {
-    if (!isWorkingDate()) {
+chrome.storage.sync.get(['checkInTime', 'workTimeEnd'], function (result) {
+    if (!isWorkingDate() || moment().format('HH:mm:ss') > result.workTimeEnd) {
         return;
     }
 

@@ -22,11 +22,35 @@
                         <label for="work-time-start" class="col-sm-3 col-form-label">
                             Start time working days
                         </label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control datetime-picker" id="work-time-start"
-                                v-model="workTimeStart"
-                            />
-                            <p>{{ errors.workTimeStart }}</p>
+
+                        <div class="col-auto">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Hours</div>
+                                </div>
+                                <select class="form-control" v-model="workStartHours">
+                                    <option v-for="option in hoursOptions" v-bind:value="option.value">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <p class="text-danger">{{ errors.workTimeStart }}</p>
+                        </div>
+
+                        <div class="col-auto">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Minutes</div>
+                                </div>
+                                <select class="form-control" v-model="workStartMinutes">
+                                    <option v-for="option in minutesOptions" v-bind:value="option.value">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <p class="text-danger">{{ errors.workTimeStart }}</p>
                         </div>
                     </div>
 
@@ -34,10 +58,35 @@
                         <label for="work-time-end" class="col-sm-3 col-form-label">
                             End time working days
                         </label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control datetime-picker" id="work-time-end"
-                                v-model="workTimeEnd"
-                            />
+
+                        <div class="col-auto">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Hours</div>
+                                </div>
+                                <select class="form-control" v-model="workEndHours">
+                                    <option v-for="option in hoursOptions" v-bind:value="option.value">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <p class="text-danger">{{ errors.workTimeStart }}</p>
+                        </div>
+
+                        <div class="col-auto">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Minutes</div>
+                                </div>
+                                <select class="form-control" v-model="workEndMinutes">
+                                    <option v-for="option in minutesOptions" v-bind:value="option.value">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <p class="text-danger">{{ errors.workTimeStart }}</p>
                         </div>
                     </div>
 

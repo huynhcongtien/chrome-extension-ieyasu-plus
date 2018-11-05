@@ -36,7 +36,7 @@ module.exports = function () {
                     '<%= theme.build %>/js/jquery.js',
                     '<%= theme.build %>/js/bootstrap.min.js',
                     '<%= theme.build %>/js/moment.min.js',
-                    '<%= theme.build %>/js/bootstrap-datetimepicker.js',
+                    '<%= theme.build %>/js/notify.js',
                     '<%= theme.build %>/js/vue.min.js'
                 ]
             }

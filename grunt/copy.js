@@ -27,7 +27,7 @@ module.exports = function () {
                         'jquery/dist/jquery.js',
                         'moment/min/moment.min.js',
                         'vue/dist/vue.min.js',
-                        'bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'
+                        'notifyjs-browser/dist/notify.js'
                     ]
                 },
                 {

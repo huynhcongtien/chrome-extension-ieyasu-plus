@@ -2,37 +2,94 @@
 
 const checkTimeValid = function (time) {
     return moment(time, 'HH:mm:ss', true).isValid();
-}
+};
 
 chrome.storage.sync.get(['workTimeStart', 'workTimeEnd'], function (result) {
     new Vue({
         el     : '#app',
         data   : function () {
             return {
-                workTimeStart: result.workTimeStart,
-                workTimeEnd  : result.workTimeEnd,
-                errors: {
-                    workTimeStart: null
-                }
+                workTimeStart   : result.workTimeStart,
+                workTimeEnd     : result.workTimeEnd,
+                workStartHours  : null,
+                workStartMinutes: null,
+                workEndHours    : null,
+                workEndMinutes  : null,
+                errors          : {
+                    workTimeStart: null,
+                    workTimeEnd  : null
+                },
+                hoursOptions    : [],
+                minutesOptions  : [],
             };
         },
         mounted: function () {
+            // setting hours options
+            for (var hours = 0; hours < 24; hours++) {
+                if (hours < 10) {
+                    hours = '0' + hours;
+                }
+                this.hoursOptions.push({
+                    text : hours,
+                    value: hours
+                });
+            }
 
+            // setting minutes options
+            for (var minutes = 0; minutes < 60; minutes++) {
+                if (minutes < 10) {
+                    minutes = '0' + minutes;
+                }
+                this.minutesOptions.push({
+                    text : minutes,
+                    value: minutes
+                });
+            }
+
+            // format HH:mm:ss to moment object
+            var workTimeStart = moment(this.workTimeStart, 'HH:mm:ss');
+            var workTimeEnd   = moment(this.workTimeEnd, 'HH:mm:ss');
+
+            // set select option value
+            this.workStartHours   = workTimeStart.format('HH');
+            this.workStartMinutes = workTimeStart.format('mm');
+            this.workEndHours     = workTimeEnd.format('HH');
+            this.workEndMinutes   = workTimeEnd.format('mm');
         },
         methods: {
             saveSetting: function () {
-                console.log(this.workTimeStart);
+                var isError = false;
 
-                console.log(checkTimeValid(this.workTimeStart));
+                if (!checkTimeValid(this.workTimeStart)) {
+                    isError                   = true;
+                    this.errors.workTimeStart = 'The time is not correct';
+                }
 
-                if (checkTimeValid(this.workTimeStart)) {
+                if (!checkTimeValid(this.workTimeEnd)) {
+                    isError                 = true;
+                    this.errors.workTimeEnd = 'The time is not correct';
+                }
+
+                if (!isError) {
+                    // reset message errors
+                    this.errors.workTimeStart = null;
+                    this.errors.workTimeEnd   = null;
+
+                    // save work time start
                     var workTimeStartNew = this.workTimeStart;
                     chrome.storage.sync.set({workTimeStart: workTimeStartNew}, function () {
                         console.log('Value of working start is set to: ' + workTimeStartNew);
                     });
+
+                    // save work time end
+                    var workTimeEndNew = this.workTimeEnd;
+                    chrome.storage.sync.set({workTimeEnd: workTimeEndNew}, function () {
+                        console.log('Value of working end is set to: ' + workTimeEndNew);
+                    });
+
+                    $.notify('Save successful', 'success');
                 } else {
-                    this.errors.workTimeStart = 'The time is not correct';
-                    console.log(this.errors);
+                    $.notify('An error occurred', 'error');
                 }
             }
         }
@@ -40,6 +97,5 @@ chrome.storage.sync.get(['workTimeStart', 'workTimeEnd'], function (result) {
 });
 
 $(function () {
-    // $('.datetime-picker').datetimepicker();
-    console.log(121313);
+
 });
