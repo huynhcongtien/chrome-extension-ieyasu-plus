@@ -6,14 +6,14 @@
 module.exports = function () {
 
     return {
-        options   : {
+        options    : {
             compress: {
                 warnings: false
             },
             report  : 'min',
             mangle  : true
         },
-        main      : {
+        main       : {
             files: {
                 '<%= theme.dist %>/js/main.min.js': [
                     '<%= theme.build %>/js/jquery.js',
@@ -22,7 +22,7 @@ module.exports = function () {
                 ]
             }
         },
-        popup     : {
+        popup      : {
             files: {
                 '<%= theme.dist %>/js/popup.min.js': [
                     '<%= theme.build %>/js/jquery.js',
@@ -30,19 +30,25 @@ module.exports = function () {
                 ]
             }
         },
-        setting   : {
+        coreSetting: {
             files: {
-                '<%= theme.dist %>/js/setting.min.js': [
+                '<%= theme.dist %>/js/core.setting.min.js': [
                     '<%= theme.build %>/js/jquery.js',
                     '<%= theme.build %>/js/bootstrap.min.js',
                     '<%= theme.build %>/js/moment.min.js',
                     '<%= theme.build %>/js/bootstrap-datetimepicker.js',
-                    '<%= theme.build %>/js/vue.min.js',
+                    '<%= theme.build %>/js/vue.min.js'
+                ]
+            }
+        },
+        setting    : {
+            files: {
+                '<%= theme.dist %>/js/setting.min.js': [
                     '<%= theme.src %>/js/setting.js'
                 ]
             }
         },
-        background: {
+        background : {
             files: {
                 '<%= theme.dist %>/js/background.min.js': [
                     '<%= theme.build %>/js/jquery.js',

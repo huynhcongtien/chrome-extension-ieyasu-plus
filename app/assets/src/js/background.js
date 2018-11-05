@@ -112,8 +112,6 @@ chrome.storage.sync.get(['checkInTime'], function (result) {
     }
 });
 
-// console.log(moment.tz.guess());
-
 /**
  * Check check-out
  */
