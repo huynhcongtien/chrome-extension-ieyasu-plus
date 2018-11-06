@@ -8,7 +8,7 @@ console.log('\'Allo \'Allo! Event Page for Browser Action');
 chrome.runtime.onInstalled.addListener(function (details) {
     console.log('previousVersion', details.previousVersion);
 
-    chrome.storage.sync.get(['workTimeStart', 'workTimeEnd'], function (result) {
+    chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification'], function (result) {
         // setting start time working days
         if (result.workTimeStart) {
             console.log('Working time start: ' + result.workTimeStart);
@@ -28,6 +28,17 @@ chrome.runtime.onInstalled.addListener(function (details) {
             var workTimeEnd = '17:00:00';
             chrome.storage.sync.set({workTimeEnd: workTimeEnd}, function () {
                 console.log('Value of working end is set to: ' + workTimeEnd);
+            });
+        }
+
+        // setting desktop notification
+        if (typeof result.isNotification !== 'undefined') {
+            console.log(result.isNotification);
+            console.log('Desktop notifications is: ' + (result.isNotification ? 'yes' : 'no'));
+        } else {
+            // setting desktop notification default is allow
+            chrome.storage.sync.set({isNotification: 1}, function () {
+                console.log('Desktop notifications is set to: yes');
             });
         }
     });
@@ -100,8 +111,8 @@ var isWorkingDate = function () {
 /**
  * Check check-in
  */
-chrome.storage.sync.get(['checkInTime', 'workTimeEnd'], function (result) {
-    if (!isWorkingDate() || moment().format('HH:mm:ss') > result.workTimeEnd) {
+chrome.storage.sync.get(['checkInTime', 'workTimeEnd', 'isNotification'], function (result) {
+    if (!result.isNotification || !isWorkingDate() || moment().format('HH:mm:ss') > result.workTimeEnd) {
         return;
     }
 
@@ -115,9 +126,9 @@ chrome.storage.sync.get(['checkInTime', 'workTimeEnd'], function (result) {
 /**
  * Check check-out
  */
-chrome.storage.sync.get(['checkInTime', 'checkOutTime', 'workTimeEnd'], function (result) {
+chrome.storage.sync.get(['checkInTime', 'checkOutTime', 'workTimeEnd', 'isNotification'], function (result) {
     // not is working date or check-in
-    if (!isWorkingDate()) {
+    if (!result.isNotification || !isWorkingDate()) {
         return;
     }
 
@@ -143,8 +154,8 @@ chrome.notifications.onButtonClicked.addListener(function (notificationId, butto
 /**
  * Set notification checkout only workdays
  */
-chrome.storage.sync.get(['workTimeEnd'], function (result) {
-    if (!isWorkingDate()) {
+chrome.storage.sync.get(['workTimeEnd', 'isNotification'], function (result) {
+    if (!result.isNotification || !isWorkingDate()) {
         return;
     }
 

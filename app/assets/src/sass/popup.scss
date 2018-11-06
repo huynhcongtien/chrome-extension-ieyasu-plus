@@ -2,10 +2,9 @@ body {
     padding: 10px;
 }
 .head {
-    display: inline-block;
-    width: 100%;
+    white-space: nowrap;
     img, .title {
-        float: left;
+        display: inline-block;
     }
     .title {
         margin: 0 0 0 10px;
@@ -17,18 +16,20 @@ body {
     padding: 0;
     margin: 15px 0;
     li {
-        background-color: #e9e1de;
-        display: inline-block;
+        background-color: #5e3b1b;
+        display: block;
         padding: 3px;
         font-size: 14px;
+        color: #fff;
         border: 1px solid #cec4ba;
+        text-align: center;
         &:hover {
             cursor: pointer;
-            background-color: #dcc8c1;
+            background-color: #7e4716;
             transition: all 0.2s;
         }
         a {
-            color: #333;
+            color: #fff;
             text-decoration: none;
         }
     }

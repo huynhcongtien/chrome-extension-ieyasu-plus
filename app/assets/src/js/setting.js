@@ -4,7 +4,7 @@ const checkTimeValid = function (time) {
     return moment(time, 'HH:mm:ss', true).isValid();
 };
 
-chrome.storage.sync.get(['workTimeStart', 'workTimeEnd'], function (result) {
+chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification'], function (result) {
     new Vue({
         el     : '#app',
         data   : function () {
@@ -21,6 +21,7 @@ chrome.storage.sync.get(['workTimeStart', 'workTimeEnd'], function (result) {
                 },
                 hoursOptions    : [],
                 minutesOptions  : [],
+                isNotification  : result.isNotification
             };
         },
         mounted: function () {
@@ -85,6 +86,12 @@ chrome.storage.sync.get(['workTimeStart', 'workTimeEnd'], function (result) {
                     var workTimeEndNew = this.workTimeEnd;
                     chrome.storage.sync.set({workTimeEnd: workTimeEndNew}, function () {
                         console.log('Value of working end is set to: ' + workTimeEndNew);
+                    });
+
+                    // save desktop notification
+                    var isNotification = parseInt(this.isNotification);
+                    chrome.storage.sync.set({isNotification: isNotification}, function () {
+                        console.log('Desktop notification is set to: ' + (isNotification ? 'yes' : 'no'));
                     });
 
                     $.notify('Save successful', 'success');
