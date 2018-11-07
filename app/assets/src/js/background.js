@@ -33,7 +33,6 @@ chrome.runtime.onInstalled.addListener(function (details) {
 
         // setting desktop notification
         if (typeof result.isNotification !== 'undefined') {
-            console.log(result.isNotification);
             console.log('Desktop notifications is: ' + (result.isNotification ? 'yes' : 'no'));
         } else {
             // setting desktop notification default is allow
@@ -128,7 +127,9 @@ chrome.storage.sync.get(['checkInTime', 'workTimeEnd', 'isNotification'], functi
  */
 chrome.storage.sync.get(['checkInTime', 'checkOutTime', 'workTimeEnd', 'isNotification'], function (result) {
     // not is working date or check-in
-    if (!result.isNotification || !isWorkingDate()) {
+    if (!result.isNotification || !isWorkingDate() || !result.checkInTime ||
+        moment(result.checkInTime, 'x').format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD') // today is not check-in
+    ) {
         return;
     }
 
