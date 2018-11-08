@@ -178,9 +178,13 @@ var countdownCheckout = null;
  * Set notification checkout only workdays
  */
 var timeoutCheckout = function () {
-    chrome.storage.sync.get(['checkInTime', 'workTimeEnd', 'isNotification'], function (result) {
+    chrome.storage.sync.get(['checkInTime', 'checkOutTime', 'workTimeEnd', 'isNotification'], function (result) {
+        var today = moment().format('YYYY:MM:DD');
+
+        // today is check-in and is checkout
         if (!result.isNotification || !isWorkingDate() || !result.checkInTime ||
-            moment(result.checkInTime, 'x').format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD')
+            moment(result.checkInTime, 'x').format('YYYY:MM:DD') !== today ||
+            (result.checkOutTime &&  moment(result.checkOutTime, 'x').format('YYYY:MM:DD') === today)
         ) {
             return;
         }

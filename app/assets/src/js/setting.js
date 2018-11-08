@@ -4,6 +4,7 @@ const checkTimeValid = function (time) {
     return moment(time, 'HH:mm:ss', true).isValid();
 };
 
+// get variables in background
 const bkg = chrome.extension.getBackgroundPage();
 
 chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification', 'isUseNewStyle', 'isMoveActionButton'], function (result) {
