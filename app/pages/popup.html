@@ -8,20 +8,19 @@
     </head>
 
     <body>
-        <div class="head">
-            <img src="../assets/dist/img/icon-38.png"/>
-            <p class="title">Ieyasu Plus</p>
+        <div id="app">
+            <div class="head">
+                <img src="../assets/dist/img/icon-38.png"/>
+                <p class="title">Ieyasu Plus</p>
+                <i class="fa fa-cog" aria-hidden="true"
+                    data-href="pages/setting.html"
+                ></i>
+            </div>
+
+            <ul class="info-list">
+                <li>Check-in today: {{ checkInTime }}</li>
+                <li>Check-out today: {{ checkOutTime }}</li>
+            </ul>
         </div>
-
-        <ul class="menu">
-            <li><a data-href="pages/setting.html">Setting</a></li>
-        </ul>
-
-        <ul class="info-list">
-            <li>Check-in today: {{  }}</li>
-        </ul>
-        <p class="view-timeout"></p>
-
-        <!--<p class="author">Author: Huynh Cong Tien</p>-->
     </body>
 </html>

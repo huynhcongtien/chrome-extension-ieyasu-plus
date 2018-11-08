@@ -136,7 +136,7 @@ chrome.storage.sync.get(['checkInTime', 'workTimeEnd', 'isNotification'], functi
     }
 
     if (!result.checkInTime ||
-        moment(result.checkInTime, 'x').format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD')
+        moment(result.checkInTime, 'x').format('YYYY-MM-DD') !== moment().format('YYYY-MM-DD')
     ) {
         noticeCheckIn();
     }
@@ -148,14 +148,14 @@ chrome.storage.sync.get(['checkInTime', 'workTimeEnd', 'isNotification'], functi
 chrome.storage.sync.get(['checkInTime', 'checkOutTime', 'workTimeEnd', 'isNotification'], function (result) {
     // not is working date or check-in
     if (!result.isNotification || !isWorkingDate() || !result.checkInTime ||
-        moment(result.checkInTime, 'x').format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD') // today is not check-in
+        moment(result.checkInTime, 'x').format('YYYY-MM-DD') !== moment().format('YYYY-MM-DD') // today is not check-in
     ) {
         return;
     }
 
     // not check out in today
     if (!result.checkOutTime ||
-        (moment(result.checkOutTime, 'x').format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD') &&
+        (moment(result.checkOutTime, 'x').format('YYYY-MM-DD') !== moment().format('YYYY-MM-DD') &&
             moment().format('HH:mm:ss') > result.workTimeEnd
         )
     ) {
@@ -179,21 +179,21 @@ var countdownCheckout = null;
  */
 var timeoutCheckout = function () {
     chrome.storage.sync.get(['checkInTime', 'checkOutTime', 'workTimeEnd', 'isNotification'], function (result) {
-        var today = moment().format('YYYY:MM:DD');
+        var today = moment().format('YYYY-MM-DD');
 
         // today is check-in and is checkout
         if (!result.isNotification || !isWorkingDate() || !result.checkInTime ||
-            moment(result.checkInTime, 'x').format('YYYY:MM:DD') !== today ||
-            (result.checkOutTime &&  moment(result.checkOutTime, 'x').format('YYYY:MM:DD') === today)
+            moment(result.checkInTime, 'x').format('YYYY-MM-DD') !== today ||
+            (result.checkOutTime &&  moment(result.checkOutTime, 'x').format('YYYY-MM-DD') === today)
         ) {
             return;
         }
 
         var now         = moment(),
-            workEndTime = moment().format('YYYY:MM:DD ' + result.workTimeEnd);
+            workEndTime = moment().format('YYYY-MM-DD ' + result.workTimeEnd);
 
         // milliseconds from now to work time end
-        var ms = moment(workEndTime, 'YYYY:MM:DD HH:mm:ss').diff(now);
+        var ms = moment(workEndTime, 'YYYY-MM-DD HH:mm:ss').diff(now);
 
         if (ms > 0) {
             var timeCountDown = moment.utc(ms).format('HH:mm:ss');
@@ -201,7 +201,7 @@ var timeoutCheckout = function () {
             console.log('Notification checkout is countdown: ' + timeCountDown);
         }
     });
-}
+};
 
 timeoutCheckout();
 

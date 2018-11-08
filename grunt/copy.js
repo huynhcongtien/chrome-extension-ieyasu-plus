@@ -14,7 +14,8 @@ module.exports = function () {
                     cwd    : 'node_modules',
                     dest   : '<%= theme.build %>/css/',
                     src    : [
-                        'bootstrap/dist/css/bootstrap.css'
+                        'bootstrap/dist/css/bootstrap.css',
+                        'font-awesome/css/font-awesome.min.css'
                     ]
                 },
                 {
@@ -38,7 +39,16 @@ module.exports = function () {
                     src    : [
                         'assets/src/img/*'
                     ]
-                }
+                },
+                {
+                    expand : true,
+                    flatten: true,
+                    cwd    : 'node_modules',
+                    dest   : '<%= theme.dist %>/fonts/',
+                    src    : [
+                        'font-awesome/fonts/*'
+                    ]
+                },
             ]
         }
     };

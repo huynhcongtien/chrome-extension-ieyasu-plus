@@ -3,13 +3,20 @@ body {
 }
 .head {
     white-space: nowrap;
+    position: relative;
     img, .title {
         display: inline-block;
     }
     .title {
-        margin: 0 0 0 10px;
+        margin: 0 40px 0 10px;
         line-height: 38px;
         font-weight: bold;
+    }
+    .fa-cog {
+        font-size: 20px;
+        position: absolute;
+        top: 10px;
+        right: 0;
     }
 }
 .menu {
@@ -32,6 +39,14 @@ body {
             color: #fff;
             text-decoration: none;
         }
+    }
+}
+.info-list {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+    li {
+        white-space: nowrap;
     }
 }
 .author {

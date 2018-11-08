@@ -10,7 +10,8 @@
     "default_locale": "en",
     "background": {
         "scripts": [
-            "assets/dist/js/background.min.js"
+            "assets/dist/js/background.min.js",
+            "assets/src/js/chromereload.js"
         ]
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
