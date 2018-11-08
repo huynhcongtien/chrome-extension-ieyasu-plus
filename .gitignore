@@ -28,3 +28,4 @@ nbproject/
 .DS_Store
 Thumbs.db
 /archive.zip
+/package-lock.json
