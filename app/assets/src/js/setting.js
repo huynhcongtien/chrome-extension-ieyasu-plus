@@ -4,7 +4,9 @@ const checkTimeValid = function (time) {
     return moment(time, 'HH:mm:ss', true).isValid();
 };
 
-chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification'], function (result) {
+const bkg = chrome.extension.getBackgroundPage();
+
+chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification', 'isUseNewStyle', 'isMoveActionButton'], function (result) {
     new Vue({
         el     : '#app',
         data   : function () {
@@ -21,7 +23,9 @@ chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification'], func
                 },
                 hoursOptions    : [],
                 minutesOptions  : [],
-                isNotification  : result.isNotification
+                isNotification  : result.isNotification,
+                isUseNewStyle   : result.isUseNewStyle,
+                isMoveActionButton: result.isMoveActionButton
             };
         },
         mounted: function () {
@@ -93,6 +97,22 @@ chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification'], func
                     chrome.storage.sync.set({isNotification: isNotification}, function () {
                         console.log('Desktop notification is set to: ' + (isNotification ? 'yes' : 'no'));
                     });
+
+                    // save set use new style
+                    var isUseNewStyle = parseInt(this.isUseNewStyle);
+                    chrome.storage.sync.set({isUseNewStyle: isUseNewStyle}, function () {
+                        console.log('Use new style is set to: ' + (isUseNewStyle ? 'yes' : 'no'));
+                    });
+
+                    // save move action button
+                    var isMoveActionButton = parseInt(this.isMoveActionButton);
+                    chrome.storage.sync.set({isMoveActionButton: isMoveActionButton}, function () {
+                        console.log('Move action button is set to: ' + (isMoveActionButton ? 'yes' : 'no'));
+                    });
+
+                    // reset timeout checkout
+                    clearTimeout(bkg.countdownCheckout);
+                    bkg.timeoutCheckout();
 
                     $.notify('Save successful', 'success');
                 } else {

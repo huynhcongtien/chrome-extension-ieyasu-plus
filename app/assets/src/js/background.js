@@ -8,7 +8,7 @@ console.log('\'Allo \'Allo! Event Page for Browser Action');
 chrome.runtime.onInstalled.addListener(function (details) {
     console.log('previousVersion', details.previousVersion);
 
-    chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification'], function (result) {
+    chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification', 'isUseNewStyle', 'isMoveActionButton'], function (result) {
         // setting start time working days
         if (result.workTimeStart) {
             console.log('Working time start: ' + result.workTimeStart);
@@ -33,12 +33,31 @@ chrome.runtime.onInstalled.addListener(function (details) {
 
         // setting desktop notification
         if (typeof result.isNotification !== 'undefined') {
-            console.log(result.isNotification);
             console.log('Desktop notifications is: ' + (result.isNotification ? 'yes' : 'no'));
         } else {
             // setting desktop notification default is allow
             chrome.storage.sync.set({isNotification: 1}, function () {
                 console.log('Desktop notifications is set to: yes');
+            });
+        }
+
+        // use new style
+        if (typeof result.isUseNewStyle !== 'undefined') {
+            console.log('Use new style is: ' + (result.isUseNewStyle ? 'yes' : 'no'));
+        } else {
+            // setting desktop notification default is allow
+            chrome.storage.sync.set({isUseNewStyle: 1}, function () {
+                console.log('Use new style is set to: yes');
+            });
+        }
+
+        // use new style
+        if (typeof result.isMoveActionButton !== 'undefined') {
+            console.log('Move action button is: ' + (result.isMoveActionButton ? 'yes' : 'no'));
+        } else {
+            // setting desktop notification default is allow
+            chrome.storage.sync.set({isMoveActionButton: 1}, function () {
+                console.log('Move action button is set to: yes');
             });
         }
     });
@@ -128,7 +147,9 @@ chrome.storage.sync.get(['checkInTime', 'workTimeEnd', 'isNotification'], functi
  */
 chrome.storage.sync.get(['checkInTime', 'checkOutTime', 'workTimeEnd', 'isNotification'], function (result) {
     // not is working date or check-in
-    if (!result.isNotification || !isWorkingDate()) {
+    if (!result.isNotification || !isWorkingDate() || !result.checkInTime ||
+        moment(result.checkInTime, 'x').format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD')
+    ) {
         return;
     }
 
@@ -151,25 +172,34 @@ chrome.notifications.onButtonClicked.addListener(function (notificationId, butto
     }
 });
 
+var countdownCheckout = null;
+
 /**
  * Set notification checkout only workdays
  */
-chrome.storage.sync.get(['workTimeEnd', 'isNotification'], function (result) {
-    if (!result.isNotification || !isWorkingDate()) {
-        return;
-    }
+var timeoutCheckout = function () {
+    chrome.storage.sync.get(['checkInTime', 'workTimeEnd', 'isNotification'], function (result) {
+        if (!result.isNotification || !isWorkingDate() || !result.checkInTime ||
+            moment(result.checkInTime, 'x').format('YYYY:MM:DD') !== moment().format('YYYY:MM:DD')
+        ) {
+            return;
+        }
 
-    var now         = moment(),
-        workEndTime = moment().format('YYYY:MM:DD ' + result.workTimeEnd);
+        var now         = moment(),
+            workEndTime = moment().format('YYYY:MM:DD ' + result.workTimeEnd);
 
-    var ms = moment(workEndTime, 'YYYY:MM:DD HH:mm:ss').diff(now);
+        // milliseconds from now to work time end
+        var ms = moment(workEndTime, 'YYYY:MM:DD HH:mm:ss').diff(now);
 
-    if (ms > 0) {
-        console.log('Notification checkout at: ' + moment(ms, 'x').format('YYYY:MM:DD HH:mm:ss'));
-        setTimeout(noticeCheckOut, ms);
-    }
-});
+        if (ms > 0) {
+            var timeCountDown = moment.utc(ms).format('HH:mm:ss');
+            countdownCheckout = setTimeout(noticeCheckOut, ms);
+            console.log('Notification checkout is countdown: ' + timeCountDown);
+        }
+    });
+}
 
+timeoutCheckout();
 
 // chrome.tabs.onRemoved.addListener(function (tabid, removed) {
 //     alert("tab closed");
