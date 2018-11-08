@@ -11,7 +11,7 @@
             <header>
                 <img src="../assets/dist/img/icon-38.png"/>
                 <strong><span class="title">Ieyasu Plus</span></strong>
-                Setting page
+                Setting
             </header>
 
             <hr/>
@@ -102,6 +102,31 @@
                                 />
                                 <label class="form-check-label" for="turn-on-notification">
                                     Turn on desktop notifications
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">
+                            Using new style
+                        </label>
+
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="use-new-style"
+                                    v-model="isUseNewStyle" true-value="1" false-value="0"
+                                />
+                                <label class="form-check-label" for="use-new-style">
+                                    Support check time
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="move-action-btn"
+                                       v-model="isMoveActionButton" true-value="1" false-value="0"
+                                />
+                                <label class="form-check-label" for="move-action-btn">
+                                    Move the action button to the next hour total
                                 </label>
                             </div>
                         </div>

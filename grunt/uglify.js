@@ -41,6 +41,17 @@ module.exports = function () {
                 ]
             }
         },
+        corePopup  : {
+            files: {
+                '<%= theme.dist %>/js/core.popup.min.js': [
+                    '<%= theme.build %>/js/jquery.js',
+                    '<%= theme.build %>/js/bootstrap.min.js',
+                    '<%= theme.build %>/js/moment.min.js',
+                    '<%= theme.build %>/js/notify.js',
+                    '<%= theme.build %>/js/vue.min.js'
+                ]
+            }
+        },
         setting    : {
             files: {
                 '<%= theme.dist %>/js/setting.min.js': [

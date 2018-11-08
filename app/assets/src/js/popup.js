@@ -1,5 +1,8 @@
 'use strict';
 
+// get variables in background
+const bkg = chrome.extension.getBackgroundPage();
+
 $(function () {
 
     $('a[data-href]').click(function () {
@@ -8,5 +11,7 @@ $(function () {
 
         window.open(samplePage, '_blank');
     });
+
+    console.log(bkg.countdownCheckout);
 
 });
