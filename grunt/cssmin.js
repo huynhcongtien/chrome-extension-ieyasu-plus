@@ -27,6 +27,7 @@ module.exports = function () {
             dest: '<%= theme.dist %>/css/setting.min.css',
             src : [
                 '<%= theme.build %>/css/bootstrap.css',
+                '<%= theme.build %>/css/font-awesome.min.css',
                 '<%= theme.build %>/css/setting.css'
             ]
         }

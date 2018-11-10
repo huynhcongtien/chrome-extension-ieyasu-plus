@@ -20,6 +20,19 @@
                 <form>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">
+                            Working days
+                        </label>
+
+                        <div class="col-auto">
+                            <label v-for="(workDayLabel, index) in workingDaysLabel" class="day-in-week">
+                                <input type="checkbox" v-model="workingDays" v-bind:value="index" />
+                                {{ workDayLabel }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">
                             Start time working days
                         </label>
 
@@ -135,6 +148,7 @@
                     <div class="form-group row">
                         <div class="offset-sm-3 col-auto">
                             <button type="button" class="btn btn-primary" v-on:click="saveSetting">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 Save
                             </button>
                         </div>
