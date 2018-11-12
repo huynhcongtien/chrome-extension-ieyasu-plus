@@ -15,7 +15,7 @@ $(function () {
 });
 
 // variables of chrome storage
-const storageVar = [
+const storageVars = [
     'workTimeStart',
     'workTimeEnd',
     'isNotification',
@@ -25,7 +25,7 @@ const storageVar = [
     'checkOutTime'
 ];
 
-chrome.storage.sync.get(storageVar, function (result) {
+chrome.storage.sync.get(storageVars, function (result) {
     new Vue({
         el     : '#app',
         data   : function () {
@@ -49,12 +49,10 @@ chrome.storage.sync.get(storageVar, function (result) {
         mounted: function () {
             var appVar = this;
 
-            chrome.storage.sync.get(['workTimeEnd'], function (result) {
-                console.log(result);
-                // var eventTime   = moment(result.workTimeEnd, 'HH:mm:ss').format('x'),
-                //     currentTime = moment().format('x'),
-                //     diffTime    = eventTime - currentTime,
-                //     duration    = moment.duration(diffTime, 'milliseconds'),
+            chrome.storage.sync.get(['workTimeEnd', 'checkInTime'], function (result) {
+                if (!result.checkInTime) {
+                    return;
+                }
 
                 var now         = null,
                     ms          = null,
@@ -69,12 +67,6 @@ chrome.storage.sync.get(storageVar, function (result) {
                     appVar.countdownCheckout = moment.utc(ms).format('HH:mm:ss');
                 }, interval);
             });
-console.log(bkg);
-            if (bkg.countdownCheckout) {
-                // setInterval(function () {
-                //     console.log(1313);
-                // }, 1000);
-            }
         }
     });
 });
