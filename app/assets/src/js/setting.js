@@ -7,7 +7,16 @@ const checkTimeValid = function (time) {
 // get variables in background
 const bkg = chrome.extension.getBackgroundPage();
 
-chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification', 'isUseNewStyle', 'isMoveActionButton'], function (result) {
+// variables of chrome storage
+const storageVar = [
+    'workTimeStart',
+    'workTimeEnd',
+    'isNotification',
+    'isUseNewStyle',
+    'isMoveActionButton'
+];
+
+chrome.storage.sync.get(storageVar, function (result) {
     new Vue({
         el     : '#app',
         data   : function () {
@@ -82,13 +91,13 @@ chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification', 'isUs
                     this.errors.workTimeEnd   = null;
 
                     // save work time start
-                    var workTimeStartNew = this.workTimeStart;
+                    var workTimeStartNew = this.workStartHours + ':' + this.workStartMinutes + ':00';
                     chrome.storage.sync.set({workTimeStart: workTimeStartNew}, function () {
                         console.log('Value of working start is set to: ' + workTimeStartNew);
                     });
 
                     // save work time end
-                    var workTimeEndNew = this.workTimeEnd;
+                    var workTimeEndNew = this.workEndHours + ':' + this.workEndMinutes + ':00';
                     chrome.storage.sync.set({workTimeEnd: workTimeEndNew}, function () {
                         console.log('Value of working end is set to: ' + workTimeEndNew);
                     });

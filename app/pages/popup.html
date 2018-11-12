@@ -13,13 +13,14 @@
                 <img src="../assets/dist/img/icon-38.png"/>
                 <p class="title">Ieyasu Plus</p>
                 <i class="fa fa-cog" aria-hidden="true"
-                    data-href="pages/setting.html"
+                    data-href="pages/setting.html" title="Open setting page"
                 ></i>
             </div>
 
             <ul class="info-list">
-                <li>Check-in today: {{ checkInTime }}</li>
-                <li>Check-out today: {{ checkOutTime }}</li>
+                <li>Check-in time today: {{ checkInTime }}</li>
+                <li>Checkout time today: {{ checkOutTime }}</li>
+                <li>Countdown to check out: {{ countdownCheckout }}</li>
             </ul>
         </div>
     </body>

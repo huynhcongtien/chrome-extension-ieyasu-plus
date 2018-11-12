@@ -2,7 +2,7 @@
 
 console.log('\'Allo \'Allo! Event Page for Browser Action');
 
-// chrome.storage.sync.clear();
+chrome.storage.sync.clear();
 
 // the extension has been installed/updated
 chrome.runtime.onInstalled.addListener(function (details) {

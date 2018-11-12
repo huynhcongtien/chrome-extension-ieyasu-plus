@@ -17,6 +17,12 @@ body {
         position: absolute;
         top: 10px;
         right: 0;
+        cursor: pointer;
+        opacity: .5;
+        &:hover {
+            opacity: 1;
+            transition: all 0.2s;
+        }
     }
 }
 .menu {
@@ -47,6 +53,7 @@ body {
     padding: 0;
     li {
         white-space: nowrap;
+        font-size: 13px;
     }
 }
 .author {
