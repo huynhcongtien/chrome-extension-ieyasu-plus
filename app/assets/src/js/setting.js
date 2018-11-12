@@ -8,7 +8,8 @@ const checkTimeValid = function (time) {
 const bkg = chrome.extension.getBackgroundPage();
 
 // variables of chrome storage
-const storageVar = [
+const storageVars = [
+    'workingDays',
     'workTimeStart',
     'workTimeEnd',
     'isNotification',
@@ -16,25 +17,27 @@ const storageVar = [
     'isMoveActionButton'
 ];
 
-chrome.storage.sync.get(storageVar, function (result) {
+chrome.storage.sync.get(storageVars, function (result) {
     new Vue({
         el     : '#app',
         data   : function () {
             return {
-                workTimeStart   : result.workTimeStart,
-                workTimeEnd     : result.workTimeEnd,
-                workStartHours  : null,
-                workStartMinutes: null,
-                workEndHours    : null,
-                workEndMinutes  : null,
-                errors          : {
+                workingDays       : result.workingDays,
+                workingDaysLabel  : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                workTimeStart     : result.workTimeStart,
+                workTimeEnd       : result.workTimeEnd,
+                workStartHours    : null,
+                workStartMinutes  : null,
+                workEndHours      : null,
+                workEndMinutes    : null,
+                errors            : {
                     workTimeStart: null,
                     workTimeEnd  : null
                 },
-                hoursOptions    : [],
-                minutesOptions  : [],
-                isNotification  : result.isNotification,
-                isUseNewStyle   : result.isUseNewStyle,
+                hoursOptions      : [],
+                minutesOptions    : [],
+                isNotification    : result.isNotification,
+                isUseNewStyle     : result.isUseNewStyle,
                 isMoveActionButton: result.isMoveActionButton
             };
         },
@@ -89,6 +92,12 @@ chrome.storage.sync.get(storageVar, function (result) {
                     // reset message errors
                     this.errors.workTimeStart = null;
                     this.errors.workTimeEnd   = null;
+
+                    // save work days in week
+                    var workingDaysNew = this.workingDays;
+                    chrome.storage.sync.set({workingDays: workingDaysNew}, function () {
+                        console.log('Working days is set to: ' + workingDaysNew);
+                    });
 
                     // save work time start
                     var workTimeStartNew = this.workStartHours + ':' + this.workStartMinutes + ':00';

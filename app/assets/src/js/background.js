@@ -8,7 +8,26 @@ chrome.storage.sync.clear();
 chrome.runtime.onInstalled.addListener(function (details) {
     console.log('previousVersion', details.previousVersion);
 
-    chrome.storage.sync.get(['workTimeStart', 'workTimeEnd', 'isNotification', 'isUseNewStyle', 'isMoveActionButton'], function (result) {
+    var storageVars = [
+        'workingDays',
+        'workTimeStart',
+        'workTimeEnd',
+        'isNotification',
+        'isUseNewStyle',
+        'isMoveActionButton'
+    ];
+
+    chrome.storage.sync.get(storageVars, function (result) {
+        if (result.workingDays) {
+            console.log('Working days: ' + result.workingDays + ' (0 (for Sunday) through 6 (for Saturday)');
+        } else {
+            // 0 (for Sunday) through 6 (for Saturday)
+            var workingDays = [1, 2, 3, 4, 5];
+            chrome.storage.sync.set({workingDays: workingDays}, function () {
+                console.log('Working days is set to: ' + workingDays);
+            });
+        }
+
         // setting start time working days
         if (result.workTimeStart) {
             console.log('Working time start: ' + result.workTimeStart);
