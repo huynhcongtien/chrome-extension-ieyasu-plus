@@ -11,7 +11,7 @@
     "background": {
         "scripts": [
             "assets/dist/js/background.min.js",
-            "assets/src/js/chromereload.js"
+            "assets/src/js/chrome-reload.js"
         ]
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
@@ -20,12 +20,13 @@
         "alarms",
         "notifications",
         "background",
-        "storage"
+        "storage",
+        "tabs"
     ],
     "content_scripts": [
         {
             "matches": [
-                "https://ieyasu.co/*"
+                "*://ieyasu.co/*"
             ],
             "js": [
                 "assets/dist/js/main.min.js"

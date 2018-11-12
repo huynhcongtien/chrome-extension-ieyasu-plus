@@ -18,7 +18,7 @@ module.exports = function () {
                 '<%= theme.dist %>/js/main.min.js': [
                     '<%= theme.build %>/js/jquery.js',
                     '<%= theme.build %>/js/moment.min.js',
-                    '<%= theme.src %>/js/contentscript.js'
+                    '<%= theme.src %>/js/content-script.js'
                 ]
             }
         },

@@ -2,7 +2,7 @@
 
 console.log('\'Allo \'Allo! Event Page for Browser Action');
 
-chrome.storage.sync.clear();
+// chrome.storage.sync.clear();
 
 // the extension has been installed/updated
 chrome.runtime.onInstalled.addListener(function (details) {
@@ -162,7 +162,7 @@ chrome.storage.sync.get(['checkInTime', 'workTimeEnd', 'isNotification'], functi
 });
 
 /**
- * Check check-out
+ * Check checkout
  */
 chrome.storage.sync.get(['checkInTime', 'checkOutTime', 'workTimeEnd', 'isNotification'], function (result) {
     // not is working date or check-in
@@ -196,7 +196,7 @@ var countdownCheckout = null;
 /**
  * Set notification checkout only workdays
  */
-var timeoutCheckout = function () {
+var timeoutCheckoutFn = function () {
     chrome.storage.sync.get(['checkInTime', 'checkOutTime', 'workTimeEnd', 'isNotification'], function (result) {
         var today = moment().format('YYYY-MM-DD');
 
@@ -222,7 +222,37 @@ var timeoutCheckout = function () {
     });
 };
 
-timeoutCheckout();
+timeoutCheckoutFn();
+
+/**
+ * Listener event from tabs
+ */
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    console.log('The request is ' + (sender.tab ? 'from a content script: ' + sender.tab.url : 'from the extension'));
+
+    switch (request.action) {
+        case 'setTimeoutCheckout':
+            // clear timeout old
+            if (countdownCheckout) {
+                clearTimeout(countdownCheckout);
+            }
+
+            timeoutCheckoutFn();
+            sendResponse({message: 'The set timeout checkout function is called.'});
+            break;
+
+        case 'clearTimeoutCheckout':
+            if (countdownCheckout) {
+                clearTimeout(countdownCheckout);
+            }
+            sendResponse({message: 'The timeout checkout function is clear.'});
+            break;
+
+        default:
+            sendResponse({message: 'No action.'});
+            break;
+    }
+});
 
 // chrome.tabs.onRemoved.addListener(function (tabid, removed) {
 //     alert("tab closed");

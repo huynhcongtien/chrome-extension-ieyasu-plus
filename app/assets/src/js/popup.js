@@ -26,7 +26,6 @@ const storageVar = [
 ];
 
 chrome.storage.sync.get(storageVar, function (result) {
-    console.log(moment(result.checkOutTime, 'x').format('YYYY-MM-DD HH:mm:ss'));
     new Vue({
         el     : '#app',
         data   : function () {
@@ -70,7 +69,7 @@ chrome.storage.sync.get(storageVar, function (result) {
                     appVar.countdownCheckout = moment.utc(ms).format('HH:mm:ss');
                 }, interval);
             });
-
+console.log(bkg);
             if (bkg.countdownCheckout) {
                 // setInterval(function () {
                 //     console.log(1313);

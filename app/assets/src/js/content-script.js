@@ -1,8 +1,5 @@
 'use strict';
 
-// get variables in background
-const bkg = chrome.extension.getBackgroundPage();
-
 $(function () {
 
     chrome.storage.sync.get(['isUseNewStyle', 'isMoveActionButton'], function (result) {
@@ -139,17 +136,24 @@ $(function () {
     // save check-in/checkout time to storage
     $('#stamping').on('click', '#btnIN1.ON', function () {
         var checkInTime = +moment(); // Unix Millisecond Timestamp
+
         chrome.storage.sync.set({checkInTime: checkInTime}, function () {
-            // set timeout checkout
-            bkg.timeoutCheckout();
             console.log('Check-in time:' + checkInTime);
+        });
+
+        // call function set timeout check out
+        chrome.runtime.sendMessage({action: 'setTimeoutCheckout'}, function(response) {
+            console.log(response.message);
         });
     }).on('click', '#btnIN2.ON', function () {
         var checkOutTime = +moment(); // Unix Millisecond Timestamp
         chrome.storage.sync.set({checkOutTime: checkOutTime}, function () {
-            // clear timeout checkout
-            clearTimeout(bkg.countdownCheckout);
             console.log('Checkout time:' + checkOutTime);
+        });
+
+        // call function clear timeout check out
+        chrome.runtime.sendMessage({action: 'clearTimeoutCheckout'}, function(response) {
+            console.log(response.message);
         });
     });
 

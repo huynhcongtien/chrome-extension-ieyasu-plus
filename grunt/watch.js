@@ -74,7 +74,7 @@ module.exports = function () {
         },
         js_main      : {
             files: [
-                '<%= theme.src %>/js/contentscript.js'
+                '<%= theme.src %>/js/content-script.js'
             ],
             tasks: [
                 'uglify:main',

@@ -78,7 +78,7 @@ module.exports = function (grunt) {
         is_not_production = parseInt(is_not_production);
 
         if (is_not_production) {
-            manifestObject.background.scripts.push('assets/src/js/chromereload.js');
+            manifestObject.background.scripts.push('assets/src/js/chrome-reload.js');
         }
 
         grunt.file.write(manifestFile, JSON.stringify(manifestObject, null, 4));//serialize it back to file
