@@ -2,7 +2,7 @@
 
 $(function () {
 
-    chrome.storage.sync.get(['isUseNewStyle', 'isMoveActionButton'], function (result) {
+    chrome.storage.sync.get(['isUseNewStyle', 'isMoveActionButton', 'test'], function (result) {
         if (!$('.workTable').length) {
             return;
         }
@@ -138,22 +138,22 @@ $(function () {
         var checkInTime = +moment(); // Unix Millisecond Timestamp
 
         chrome.storage.sync.set({checkInTime: checkInTime}, function () {
-            console.log('Check-in time:' + checkInTime);
+            console.info('Check-in time:' + checkInTime);
         });
 
         // call function set timeout check out
         chrome.runtime.sendMessage({action: 'setTimeoutCheckout'}, function(response) {
-            console.log(response.message);
+            console.info(response.message);
         });
     }).on('click', '#btnIN2.ON', function () {
         var checkOutTime = +moment(); // Unix Millisecond Timestamp
         chrome.storage.sync.set({checkOutTime: checkOutTime}, function () {
-            console.log('Checkout time:' + checkOutTime);
+            console.info('Checkout time:' + checkOutTime);
         });
 
         // call function clear timeout check out
         chrome.runtime.sendMessage({action: 'clearTimeoutCheckout'}, function(response) {
-            console.log(response.message);
+            console.info(response.message);
         });
     });
 

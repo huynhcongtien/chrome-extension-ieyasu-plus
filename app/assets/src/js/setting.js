@@ -131,7 +131,7 @@ chrome.storage.sync.get(storageVars, function (result) {
 
                     // reset timeout checkout
                     clearTimeout(bkg.countdownCheckout);
-                    bkg.timeoutCheckout();
+                    bkg.timeoutCheckoutFn();
 
                     $.notify('Save successful', 'success');
                 } else {

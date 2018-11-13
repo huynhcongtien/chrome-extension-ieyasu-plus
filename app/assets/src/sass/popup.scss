@@ -47,19 +47,18 @@ body {
         }
     }
 }
-.info-list {
-    list-style: none;
+.info {
     margin: 10px 0 0;
-    padding: 0;
-    li {
-        white-space: nowrap;
-        font-size: 13px;
+    font-size: 13px;
+    tr {
+        td:last-child {
+            min-width: 115px;
+        }
     }
 }
-.author {
-    background-color: #5e3b1b;
-    color: #fff;
-    font-size: 14px;
-    padding: 5px;
-    white-space: nowrap;
+.on-off-countdown {
+    float: right;
+    .ui-switcher {
+        margin: 0;
+    }
 }

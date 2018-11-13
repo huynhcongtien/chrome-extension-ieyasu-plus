@@ -17,11 +17,30 @@
                 ></i>
             </div>
 
-            <ul class="info-list">
-                <li>Check-in time today: {{ checkInTime }}</li>
-                <li>Checkout time today: {{ checkOutTime }}</li>
-                <li>Countdown to check out: {{ countdownCheckout }}</li>
-            </ul>
+            <table class="table table-sm info">
+                <tbody>
+                    <tr>
+                        <td nowrap>Check-in time today</td>
+                        <td nowrap>{{ checkInTime }}</td>
+                    </tr>
+                    <tr>
+                        <td nowrap>Checkout time today</td>
+                        <td nowrap>{{ checkOutTime }}</td>
+                    </tr>
+                    <tr>
+                        <td nowrap>Countdown to check out</td>
+                        <td nowrap>
+                            {{ countdownCheckout }}
+
+                            <div class="on-off-countdown">
+                                <input type="checkbox" class="is-countdown"
+                                    v-model="isCountdown" v-bind:disabled="isSwitchCountdown"
+                                />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </body>
 </html>
