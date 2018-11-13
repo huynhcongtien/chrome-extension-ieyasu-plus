@@ -20,14 +20,13 @@ chrome.storage.sync.get(storageVars, function (result) {
     new Vue({
         el     : '#app',
         data   : function () {
-            var isWorkDay = bkg.isWorkingDate(result.workingDays),
-                today     = moment().format('YYYY-MM-DD'),
-                data      = {
+            var //isWorkDay = bkg.isWorkingDate(result.workingDays),
+                today = moment().format('YYYY-MM-DD'),
+                data  = {
                     checkInTime      : 'N/A',
                     checkOutTime     : 'N/A',
                     countdownCheckout: 'N/A',
-                    isCountdown      : false,
-                    isSwitchCountdown: !isWorkDay
+                    isCountdown      : (typeof result.isCountdown === 'undefined' || result.isCountdown === true) ? true : false
                 }
             ;
 
@@ -35,9 +34,9 @@ chrome.storage.sync.get(storageVars, function (result) {
                 data.checkInTime = moment(result.checkInTime, 'x').format('YYYY-MM-DD HH:mm:ss');
             }
 
-            if (result.isCountdown && isWorkDay) {
-                data.isCountdown = true;
-            }
+            // if (result.isCountdown) {
+            //     data.isCountdown = true;
+            // }
 
             if (result.checkOutTime && moment(result.checkOutTime, 'x').format('YYYY-MM-DD') === today) {
                 data.checkOutTime = moment(result.checkOutTime, 'x').format('YYYY-MM-DD HH:mm:ss');
@@ -51,7 +50,9 @@ chrome.storage.sync.get(storageVars, function (result) {
 
             // function countdown check out
             var countdownFn = function () {
-                var today = moment().format('YYYY-MM-DD');
+                var now         = moment(),
+                    today       = moment().format('YYYY-MM-DD'),
+                    workEndTime = moment().format('YYYY-MM-DD ' + result.workTimeEnd);
 
                 try {
                     if (!bkg.isWorkingDate(result.workingDays)) {
@@ -65,6 +66,10 @@ chrome.storage.sync.get(storageVars, function (result) {
                         throw 'Today is check out';
                     }
 
+                    if (moment(workEndTime, 'YYYY-MM-DD HH:mm:ss').diff(now) <= 0) {
+                        throw 'Working time end';
+                    }
+
                     if (!result.isCountdown) {
                         throw 'Countdown is off';
                     }
@@ -73,20 +78,21 @@ chrome.storage.sync.get(storageVars, function (result) {
                     return null;
                 }
 
-                var now         = moment(),
-                    ms          = null,
-                    workEndTime = moment().format('YYYY-MM-DD ' + result.workTimeEnd),
-                    interval    = 1000;
+                console.info('Countdown is starting');
 
-                if (moment(workEndTime, 'YYYY-MM-DD HH:mm:ss').diff(now) <= 0) {
-                    console.info('Working time end');
-                    return null;
-                }
+                var ms       = null,
+                    interval = 1000;
 
                 return setInterval(function () {
                     now = moment();
                     // milliseconds from now to work time end
                     ms  = moment(workEndTime, 'YYYY-MM-DD HH:mm:ss').diff(now);
+
+                    if (ms < 0) {
+                        appVar.countdownCheckout = 'N/A';
+                        clearInterval(intervalTrigger);
+                        return;
+                    }
 
                     appVar.countdownCheckout = moment.utc(ms).format('HH:mm:ss');
                 }, interval);
@@ -98,6 +104,10 @@ chrome.storage.sync.get(storageVars, function (result) {
             $('.is-countdown').change(function () {
                 var elCheckbox  = $(this),
                     isCountdown = elCheckbox.is(':checked') ? true : false;
+
+                chrome.storage.sync.set({isCountdown: isCountdown}, function () {
+                    console.info('Countdown is set to: ' + (isCountdown ? 'On' : 'Off'));
+                });
 
                 if (isCountdown) {
                     intervalTrigger = countdownFn();  // start countdown check out in popup
@@ -116,10 +126,6 @@ chrome.storage.sync.get(storageVars, function (result) {
                     });
 
                 }
-
-                chrome.storage.sync.set({isCountdown: isCountdown}, function () {
-                    console.info('Countdown is set to: ' + (isCountdown ? 'on' : 'off'));
-                });
             });
         }
     });

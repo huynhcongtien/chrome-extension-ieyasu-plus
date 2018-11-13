@@ -2,7 +2,7 @@
 
 console.log('\'Allo \'Allo! Event Page for Browser Action');
 
-chrome.storage.sync.clear();
+// chrome.storage.sync.clear();
 
 // the extension has been installed/updated
 chrome.runtime.onInstalled.addListener(function (details) {
@@ -206,7 +206,7 @@ var timeoutCheckoutFn = function () {
         if (!result.isNotification || !isWorkingDate(result.workingDays) ||
             (result.checkOutTime && moment(result.checkOutTime, 'x').format('YYYY-MM-DD') === today)
         ) {
-            console.log('adadad');
+            console.log('adada hhhhd');
             return;
         }
 
@@ -219,7 +219,15 @@ var timeoutCheckoutFn = function () {
         if (ms > 0) {
             var timeCountDown = moment.utc(ms).format('HH:mm:ss');
             countdownCheckout = setTimeout(noticeCheckOut, ms);
+
+            // reset auto countdown everyday
+            chrome.storage.sync.set({isCountdown: true}, function () {
+                console.info('Countdown is set to: On');
+            });
+
             console.info('Countdown check out in: ' + timeCountDown);
+        } else {
+            console.info('Working time end');
         }
     });
 };
