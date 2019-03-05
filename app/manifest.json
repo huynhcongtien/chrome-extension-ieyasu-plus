@@ -15,7 +15,7 @@
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
-        "https://ieyasu.co/*",
+        "https://f.ieyasu.co/*",
         "alarms",
         "notifications",
         "background",
@@ -25,7 +25,7 @@
     "content_scripts": [
         {
             "matches": [
-                "*://ieyasu.co/*"
+                "*://f.ieyasu.co/*"
             ],
             "js": [
                 "assets/dist/js/main.min.js"
