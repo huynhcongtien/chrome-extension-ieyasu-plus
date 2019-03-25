@@ -73,3 +73,14 @@ td.time-not-full, .tableNormal tr:hover td.time-not-full {
         left: 23px;
     }
 }
+.child-table-approval {
+    width: 100%;
+    .btn-group {
+        .btn {
+            margin: 0;
+            &.btnApproval {
+                margin-bottom: 5px;
+            }
+        }
+    }
+}

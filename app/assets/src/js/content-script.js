@@ -162,6 +162,7 @@ $(function () {
     if (tableApproval.length) {
         tableApproval.find('tr .cellMonth').each(function () {
             var cellMonth    = $(this),
+                cellComment  = cellMonth.parent('tr').find('.cellComment'),
                 elLinkApproval = cellMonth.find('a');
 
             if (elLinkApproval.length) {
@@ -173,16 +174,35 @@ $(function () {
                     dataType: 'html',
                     success:  function (result) {
                         var contentHtml  = $(result),
-                            tableWorkRow = contentHtml.find('#editGraphTable tbody tr');
+                            tableWorkRow = contentHtml.find('#editGraphTable tbody tr'),
+                            childTable   = '';
 
                         $.each(tableWorkRow, function () {
                             var row         = $(this),
                                 btnApproval = row.find('.view_work .btnApproval');
 
                             if (btnApproval.length) {
-                                cellMonth.append(btnApproval);
+                                var classRow       = row.attr('class'),
+                                    boxBtnApproval = btnApproval.parent(),
+                                    cellDate       = row.find('.cellDate'),
+                                    cellTimeTotal  = row.find('.cellTime.cellTime07.cellBreak')
+                                ;
+
+                                console.log(cellTimeTotal);
+
+                                cellDate.find('.view_work').remove();
+
+                                childTable += '' +
+                                    '<tr class="' + classRow + '">' +
+                                    '   <td>' + cellDate.html() + '</td>' +
+                                    '   <td>' + cellTimeTotal.html() + '</td>' +
+                                    '   <td class="btn-group">' + boxBtnApproval.html() + '</td>' +
+                                    '</tr>';
                             }
                         });
+
+                        childTable = '<table class="child-table-approval">' + childTable + '</table>';
+                        cellComment.append(childTable);
                     },
                     error:    function (xhr, status, error) {
                         console.log(xhr);
