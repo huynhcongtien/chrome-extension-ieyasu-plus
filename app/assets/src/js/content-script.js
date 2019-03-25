@@ -142,7 +142,7 @@ $(function () {
         });
 
         // call function set timeout check out
-        chrome.runtime.sendMessage({action: 'setTimeoutCheckout'}, function(response) {
+        chrome.runtime.sendMessage({action: 'setTimeoutCheckout'}, function (response) {
             console.info(response.message);
         });
     }).on('click', '#btnIN2.ON', function () {
@@ -152,10 +152,44 @@ $(function () {
         });
 
         // call function clear timeout check out
-        chrome.runtime.sendMessage({action: 'clearTimeoutCheckout'}, function(response) {
+        chrome.runtime.sendMessage({action: 'clearTimeoutCheckout'}, function (response) {
             console.info(response.message);
         });
     });
 
+    var tableApproval = $('.tableApproval');
+
+    if (tableApproval.length) {
+        tableApproval.find('tr .cellMonth').each(function () {
+            var cellMonth    = $(this),
+                elLinkApproval = cellMonth.find('a');
+
+            if (elLinkApproval.length) {
+                var linkApproval = elLinkApproval.get(0).href;
+
+                $.ajax({
+                    url:      linkApproval,
+                    type:     'GET',
+                    dataType: 'html',
+                    success:  function (result) {
+                        var contentHtml  = $(result),
+                            tableWorkRow = contentHtml.find('#editGraphTable tbody tr');
+
+                        $.each(tableWorkRow, function () {
+                            var row         = $(this),
+                                btnApproval = row.find('.view_work .btnApproval');
+
+                            if (btnApproval.length) {
+                                cellMonth.append(btnApproval);
+                            }
+                        });
+                    },
+                    error:    function (xhr, status, error) {
+                        console.log(xhr);
+                    }
+                });
+            }
+        });
+    }
 
 });
