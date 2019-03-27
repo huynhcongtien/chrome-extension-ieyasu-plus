@@ -1,14 +1,14 @@
 'use strict';
 
-const checkTimeValid = function (time) {
+var checkTimeValid = function (time) {
     return moment(time, 'HH:mm:ss', true).isValid();
 };
 
 // get variables in background
-const bkg = chrome.extension.getBackgroundPage();
+var bkg = chrome.extension.getBackgroundPage();
 
 // variables of chrome storage
-const storageVars = [
+var storageVars = [
     'workingDays',
     'workTimeStart',
     'workTimeEnd',
