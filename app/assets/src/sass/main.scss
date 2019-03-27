@@ -84,3 +84,13 @@ td.time-not-full, .tableNormal tr:hover td.time-not-full {
         }
     }
 }
+.tableNormal tr:hover td {
+    .dayRed td {
+        color: #d42f61 !important;
+        background: #fbeef2 !important;
+    }
+    .dayBlue td {
+        color: #006a96 !important;
+        background: #ebf5f9 !important;
+    }
+}
