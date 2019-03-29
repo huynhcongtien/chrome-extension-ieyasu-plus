@@ -185,17 +185,25 @@ $(function () {
                                 var classRow       = row.attr('class'),
                                     boxBtnApproval = btnApproval.parent(),
                                     cellDate       = row.find('.cellDate'),
-                                    cellTimeTotal  = row.find('.cellTime.cellTime07.cellBreak')
+                                    cellTimeTotal  = row.find('.cellTime.cellTime07.cellBreak'),
+                                    workTimeTotal  = $.trim(cellTimeTotal.text()),
+                                    classWorkTime  = ''
                                 ;
 
-                                console.log(cellTimeTotal);
+                                if (workTimeTotal !== '0:00') {
+                                    classWorkTime = 'time-full';
+
+                                    if (workTimeTotal !== '8:00') {
+                                        classWorkTime = 'time-not-full';
+                                    }
+                                }
 
                                 cellDate.find('.view_work').remove();
 
                                 childTable += '' +
                                     '<tr class="' + classRow + '">' +
                                     '   <td>' + cellDate.html() + '</td>' +
-                                    '   <td>' + cellTimeTotal.html() + '</td>' +
+                                    '   <td class="' + classWorkTime + '">' + cellTimeTotal.html() + '</td>' +
                                     '   <td class="btn-group">' + boxBtnApproval.html() + '</td>' +
                                     '</tr>';
                             }
@@ -211,5 +219,12 @@ $(function () {
             }
         });
     }
+
+    /**
+     * Remove row after approval
+     */
+    $('.dailyList.tableApproval').on('click', '.child-table-approval .btn-group .btn', function () {
+        $(this).closest('tr').remove();
+    });
 
 });
