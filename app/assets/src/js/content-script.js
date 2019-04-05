@@ -184,6 +184,7 @@ $(function () {
                             if (btnApproval.length) {
                                 var classRow       = row.attr('class'),
                                     boxBtnApproval = btnApproval.parent(),
+                                    cellType       = row.find('.cellType'),
                                     cellDate       = row.find('.cellDate'),
                                     cellTimeTotal  = row.find('.cellTime.cellTime07.cellBreak'),
                                     workTimeTotal  = $.trim(cellTimeTotal.text()),
@@ -202,6 +203,7 @@ $(function () {
 
                                 childTable += '' +
                                     '<tr class="' + classRow + '">' +
+                                    '   <td>' + cellType.html() + '</td>' +
                                     '   <td>' + cellDate.html() + '</td>' +
                                     '   <td class="' + classWorkTime + '">' + cellTimeTotal.html() + '</td>' +
                                     '   <td class="btn-group">' + boxBtnApproval.html() + '</td>' +
