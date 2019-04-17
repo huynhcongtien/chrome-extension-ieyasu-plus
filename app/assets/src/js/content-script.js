@@ -24,22 +24,7 @@ $(function () {
                         return;
                     }
 
-                    var checkInActual   = $.trim(cellTime.find('.item02').text()),
-                        checkInEdited   = $.trim(cellTime.find('.item01').text()),
-                        cellTime01Class = 'not-change'
-                    ;
-
-                    if (!checkInActual && !checkInEdited) {
-                        return;
-                    }
-
-                    if (checkInActual !== checkInEdited) {  // had update time
-                        cellTime01Class = 'is-change';
-                    } else if (checkInEdited > '10:00' && cellTime.hasClass('cellTime01')) { // working is late
-                        cellTime01Class = 'is-late';
-                    } else if (checkInEdited < '19:00' && cellTime.hasClass('cellTime02')) { // working is early
-                        cellTime01Class = 'is-early';
-                    }
+                    var cellTime01Class = setClassLateEarlyTime(cellTime);
 
                     cellTime.addClass(cellTime01Class);
                 });
@@ -157,6 +142,32 @@ $(function () {
         });
     });
 
+    /**
+     * Set class of check-in/checkout time
+     * @param cellTime
+     * @returns {string}
+     */
+    function setClassLateEarlyTime(cellTime) {
+        var checkInActual   = $.trim(cellTime.find('.item02').text()),
+            checkInEdited   = $.trim(cellTime.find('.item01').text()),
+            cellTimeClass = 'not-change'
+        ;
+
+        if (!checkInActual && !checkInEdited) {
+            return;
+        }
+
+        if (checkInActual !== checkInEdited) {  // had update time
+            cellTimeClass = 'is-change';
+        } else if (checkInEdited > '10:00' && cellTime.hasClass('cellTime01')) { // working is late
+            cellTimeClass = 'is-late';
+        } else if (checkInEdited < '19:00' && cellTime.hasClass('cellTime02')) { // working is early
+            cellTimeClass = 'is-early';
+        }
+
+        return cellTimeClass;
+    }
+
     var tableApproval = $('.tableApproval');
 
     if (tableApproval.length) {
@@ -186,6 +197,8 @@ $(function () {
                                     boxBtnApproval = btnApproval.parent(),
                                     cellType       = row.find('.cellType'),
                                     cellDate       = row.find('.cellDate'),
+                                    cellTimeStart  = row.find('.cellTime.cellTime01.cellBreak'),
+                                    cellTimeEnd    = row.find('.cellTime.cellTime02'),
                                     cellTimeTotal  = row.find('.cellTime.cellTime07.cellBreak'),
                                     workTimeTotal  = $.trim(cellTimeTotal.text()),
                                     classWorkTime  = ''
@@ -199,12 +212,17 @@ $(function () {
                                     }
                                 }
 
+                                var classCheckIn  = setClassLateEarlyTime(cellTimeStart),
+                                    classCheckOut = setClassLateEarlyTime(cellTimeEnd);
+
                                 cellDate.find('.view_work').remove();
 
                                 childTable += '' +
                                     '<tr class="' + classRow + '">' +
-                                    '   <td>' + cellType.html() + '</td>' +
                                     '   <td>' + cellDate.html() + '</td>' +
+                                    '   <td class="day-type">' + cellType.html() + '</td>' +
+                                    '   <td class="time-check ' + classCheckIn + '">' + cellTimeStart.html() + '</td>' +
+                                    '   <td class="time-check ' + classCheckOut + '">' + cellTimeEnd.html() + '</td>' +
                                     '   <td class="' + classWorkTime + '">' + cellTimeTotal.html() + '</td>' +
                                     '   <td class="btn-group">' + boxBtnApproval.html() + '</td>' +
                                     '</tr>';

@@ -1,7 +1,7 @@
 /*.workTable tr:hover td {
     background: #a0a0a0;
 }*/
-.cellTime, .tableNormal tr:hover td {
+.cellTime, .tableNormal tr:hover td, .child-table-approval td {
     &.is-change {
         background: #ce6e6e;
         .item01 {
@@ -83,6 +83,15 @@ td.time-not-full, .tableNormal tr:hover td.time-not-full {
             }
         }
     }
+    .time-not-full {
+        white-space: nowrap !important;
+    }
+    .time-check {
+        width: 52px;
+    }
+    .day-type {
+        width: 85px;
+    }
 }
 .tableNormal tr:hover td {
     .dayRed td {
@@ -92,5 +101,9 @@ td.time-not-full, .tableNormal tr:hover td.time-not-full {
     .dayBlue td {
         color: #006a96 !important;
         background: #ebf5f9 !important;
+    }
+    .dayGreen td {
+        color: #408135 !important;
+        background: #edf9eb !important;
     }
 }
