@@ -43,7 +43,8 @@ $(function () {
                 }
 
                 // check total working hours
-                var cellTotalWorkTime = $(tr).find('.cellTime07:not(.cellBtime)');
+                var cellTotalWorkTime = $(tr)
+                    .find('.cellTime07:not(.cellBtime)');
 
                 cellTotalWorkTime.each(function (index, cell) {
                     var cellTime = $(cell);
@@ -88,7 +89,8 @@ $(function () {
             var rowFirst = $('.workTable tbody tr:first'),
                 thLast   = rowFirst.find('th:last-child');
 
-            $('.workTable tbody tr:first th:nth-child(6)').after(thLast.clone());
+            $('.workTable tbody tr:first th:nth-child(6)')
+                .after(thLast.clone());
             thLast.remove();
         }
     });
@@ -148,8 +150,8 @@ $(function () {
      * @returns {string}
      */
     function setClassLateEarlyTime(cellTime) {
-        var checkInActual   = $.trim(cellTime.find('.item02').text()),
-            checkInEdited   = $.trim(cellTime.find('.item01').text()),
+        var checkInActual = $.trim(cellTime.find('.item02').text()),
+            checkInEdited = $.trim(cellTime.find('.item01').text()),
             cellTimeClass = 'not-change'
         ;
 
@@ -172,18 +174,18 @@ $(function () {
 
     if (tableApproval.length) {
         tableApproval.find('tr .cellMonth').each(function () {
-            var cellMonth    = $(this),
-                cellComment  = cellMonth.parent('tr').find('.cellComment'),
+            var cellMonth      = $(this),
+                cellComment    = cellMonth.parent('tr').find('.cellComment'),
                 elLinkApproval = cellMonth.find('a');
 
             if (elLinkApproval.length) {
                 var linkApproval = elLinkApproval.get(0).href;
 
                 $.ajax({
-                    url:      linkApproval,
-                    type:     'GET',
+                    url     : linkApproval,
+                    type    : 'GET',
                     dataType: 'html',
-                    success:  function (result) {
+                    success : function (result) {
                         var contentHtml  = $(result),
                             tableWorkRow = contentHtml.find('#editGraphTable tbody tr'),
                             childTable   = '';
@@ -232,7 +234,7 @@ $(function () {
                         childTable = '<table class="child-table-approval">' + childTable + '</table>';
                         cellComment.append(childTable);
                     },
-                    error:    function (xhr, status, error) {
+                    error   : function (xhr, status, error) {
                         console.log(xhr);
                     }
                 });
@@ -243,8 +245,9 @@ $(function () {
     /**
      * Remove row after approval
      */
-    $('.dailyList.tableApproval').on('click', '.child-table-approval .btn-group .btn', function () {
-        $(this).closest('tr').remove();
-    });
+    $('.dailyList.tableApproval')
+        .on('click', '.child-table-approval .btn-group .btn', function () {
+            $(this).closest('tr').remove();
+        });
 
 });
