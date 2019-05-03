@@ -11,7 +11,6 @@
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "notifyjs-browser": "^0.4.2",
-    "tar": "^4.4.8",
     "vue": "^2.6.10"
   },
   "devDependencies": {
@@ -35,6 +34,7 @@
     "lodash": "^4.17.11",
     "popper.js": "^1.14.7",
     "semver": "^6.0.0",
+    "tar": "^4.4.8",
     "time-grunt": "^2.0.0"
   },
   "scripts": {
