@@ -9,14 +9,14 @@ module.exports = function () {
         options      : {
             livereload: 35729
         },
-        css_main     : {
-            files: [
-                '<%= theme.build %>/css/main.css'
-            ],
-            tasks: [
-                'cssmin:main'
-            ]
-        },
+        // css_main     : {
+        //     files: [
+        //         '<%= theme.build %>/css/main.css'
+        //     ],
+        //     tasks: [
+        //         'cssmin:main'
+        //     ]
+        // },
         css_popup    : {
             files: [
                 '<%= theme.build %>/css/popup.css'
@@ -38,7 +38,7 @@ module.exports = function () {
                 '<%= theme.src %>/sass/main.scss'
             ],
             options: {
-                livereload: false
+                livereload: true
             },
             tasks  : [
                 'sass:main',

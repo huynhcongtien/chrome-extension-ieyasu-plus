@@ -9,7 +9,8 @@ $(function () {
 
         var isUseNewStyle      = result.isUseNewStyle,
             isMoveActionButton = result.isMoveActionButton,
-            rowTime            = $('.workTable tbody tr');
+            rowTime            = $('.workTable tbody tr')
+        ;
 
         rowTime.each(function (index, tr) {
             if (isUseNewStyle) {
@@ -173,10 +174,20 @@ $(function () {
     var tableApproval = $('.tableApproval');
 
     if (tableApproval.length) {
+        showTimeOnTableApproval();
+        createBtnApprovalAll();
+    }
+
+    /**
+     * Show log check-in/check out time on table approval
+     */
+    function showTimeOnTableApproval()
+    {
         tableApproval.find('tr .cellMonth').each(function () {
             var cellMonth      = $(this),
                 cellComment    = cellMonth.parent('tr').find('.cellComment'),
-                elLinkApproval = cellMonth.find('a');
+                elLinkApproval = cellMonth.find('a')
+            ;
 
             if (elLinkApproval.length) {
                 var linkApproval = elLinkApproval.get(0).href;
@@ -202,6 +213,7 @@ $(function () {
                                     cellTimeStart  = row.find('.cellTime.cellTime01.cellBreak'),
                                     cellTimeEnd    = row.find('.cellTime.cellTime02'),
                                     cellTimeTotal  = row.find('.cellTime.cellTime07.cellBreak'),
+                                    cellMemo       = row.find('.cellMemo'),
                                     workTimeTotal  = $.trim(cellTimeTotal.text()),
                                     classWorkTime  = ''
                                 ;
@@ -215,23 +227,32 @@ $(function () {
                                 }
 
                                 var classCheckIn  = setClassLateEarlyTime(cellTimeStart),
-                                    classCheckOut = setClassLateEarlyTime(cellTimeEnd);
+                                    classCheckOut = setClassLateEarlyTime(cellTimeEnd),
+                                    classMemo     = 'not-empty'
+                                ;
 
                                 cellDate.find('.view_work').remove();
 
+                                if (!cellMemo.find('div:first-child').text()) {
+                                    classMemo = 'empty';
+                                } else if (cellMemo.find('div:last-child').text()) {
+                                    classMemo = 'is-approval';
+                                }
+
                                 childTable += '' +
                                     '<tr class="' + classRow + '">' +
-                                    '   <td>' + cellDate.html() + '</td>' +
+                                    '   <td class="date">' + cellDate.html() + '</td>' +
                                     '   <td class="day-type">' + cellType.html() + '</td>' +
-                                    '   <td class="time-check ' + classCheckIn + '">' + cellTimeStart.html() + '</td>' +
-                                    '   <td class="time-check ' + classCheckOut + '">' + cellTimeEnd.html() + '</td>' +
-                                    '   <td class="' + classWorkTime + '">' + cellTimeTotal.html() + '</td>' +
+                                    '   <td class="time time-check ' + classCheckIn + '">' + cellTimeStart.html() + '</td>' +
+                                    '   <td class="time time-check ' + classCheckOut + '">' + cellTimeEnd.html() + '</td>' +
+                                    '   <td class="time ' + classWorkTime + '" nowrap>' + cellTimeTotal.html() + '</td>' +
+                                    '   <td class="memo ' + classMemo + '">' + cellMemo.html() + '</td>' +
                                     '   <td class="btn-group">' + boxBtnApproval.html() + '</td>' +
                                     '</tr>';
                             }
                         });
 
-                        childTable = '<table class="child-table-approval">' + childTable + '</table>';
+                        childTable = '<div class="box-tb-child"><table class="child-table-approval">' + childTable + '</table></div>';
                         cellComment.append(childTable);
                     },
                     error   : function (xhr, status, error) {
@@ -242,12 +263,31 @@ $(function () {
         });
     }
 
+    function createBtnApprovalAll()
+    {
+        var boxHeader = $('#mainInner .reportHeader .box'),
+            btnNew    = '' +
+                '<a class="btn btnSubmit" href="javascript:void(0);"' +
+                '   id="approval_all_8_hours"' +
+                '>' +
+                '   Approval All 8 hours' +
+                '</a>'
+        ;
+
+        boxHeader.append(btnNew);
+
+        $('#approval_all_8_hours').click(function () {
+            tableApproval.find('.child-table-approval .btnApproval')
+        });
+    }
+
     /**
      * Remove row after approval
      */
     $('.dailyList.tableApproval')
         .on('click', '.child-table-approval .btn-group .btn', function () {
             $(this).closest('tr').remove();
-        });
+        })
+    ;
 
 });

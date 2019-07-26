@@ -8,7 +8,7 @@ module.exports = function () {
     return {
         options    : {
             compress: {
-                warnings: false
+                drop_console: false
             },
             report  : 'min',
             mangle  : true

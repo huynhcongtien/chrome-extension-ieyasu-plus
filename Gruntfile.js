@@ -60,7 +60,7 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('default', [
-        'pro'
+        'dev'
     ]);
 
     grunt.registerTask('update_manifest', function (is_not_production) {

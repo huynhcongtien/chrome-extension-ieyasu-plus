@@ -73,24 +73,51 @@ td.time-not-full, .tableNormal tr:hover td.time-not-full {
         left: 23px;
     }
 }
-.child-table-approval {
+.box-tb-child {
+    display: inline-block;
     width: 100%;
-    .btn-group {
-        .btn {
-            margin: 0;
-            &.btnApproval {
-                margin-bottom: 5px;
+    .child-table-approval {
+        width: 100%;
+        .time-not-full {
+            white-space: nowrap !important;
+        }
+        .time-check {
+            width: 52px;
+        }
+        .day-type {
+            width: 85px;
+        }
+        tbody {
+            td {
+                word-break: keep-all;
+                &.date {
+                    width: 45px;
+                }
+                &.time {
+                    width: 50px;
+                }
+                &.memo {
+                    &.empty {
+                        //background: #b7b7b7;
+                    }
+                    &.not-empty {
+                        background: #ce6e6e;
+                    }
+                    &.is-approval {
+                        background: #b9d6b9;
+                    }
+                }
+                &.btn-group {
+                    width: 70px;
+                    .btn {
+                        margin: 0;
+                        &.btnApproval {
+                            margin-bottom: 5px;
+                        }
+                    }
+                }
             }
         }
-    }
-    .time-not-full {
-        white-space: nowrap !important;
-    }
-    .time-check {
-        width: 52px;
-    }
-    .day-type {
-        width: 85px;
     }
 }
 .tableNormal tr:hover td {
