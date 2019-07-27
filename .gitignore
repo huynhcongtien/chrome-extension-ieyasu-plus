@@ -29,3 +29,6 @@ nbproject/
 Thumbs.db
 /archive.zip
 /package-lock.json
+app/manifest.json
+app/assets/dist
+app/assets/build
