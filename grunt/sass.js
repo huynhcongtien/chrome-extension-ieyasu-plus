@@ -9,28 +9,28 @@ module.exports = function () {
         main   : {
             options: {
                 sourcemap: 'none',
-                style    : 'expanded'
+                style    : 'compressed'
             },
             files  : {
-                '<%= theme.build %>/css/main.css': '<%= theme.src %>/sass/main.scss'
+                '<%= theme.dist %>/css/main.min.css': '<%= theme.src %>/sass/main.scss'
             }
         },
         popup  : {
             options: {
                 sourcemap: 'none',
-                style    : 'expanded'
+                style    : 'compressed'
             },
             files  : {
-                '<%= theme.build %>/css/popup.css': '<%= theme.src %>/sass/popup.scss'
+                '<%= theme.dist %>/css/popup.min.css': '<%= theme.src %>/sass/popup.scss'
             }
         },
         setting: {
             options: {
                 sourcemap: 'none',
-                style    : 'expanded'
+                style    : 'compressed'
             },
             files  : {
-                '<%= theme.build %>/css/setting.css': '<%= theme.src %>/sass/setting.scss'
+                '<%= theme.dist %>/css/setting.min.css': '<%= theme.src %>/sass/setting.scss'
             }
         }
     };

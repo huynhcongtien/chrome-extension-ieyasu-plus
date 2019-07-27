@@ -270,14 +270,16 @@ $(function () {
                 '<a class="btn btnSubmit" href="javascript:void(0);"' +
                 '   id="approval_all_8_hours"' +
                 '>' +
-                '   Approval All 8 hours' +
+                '   Approval all full time' +
                 '</a>'
         ;
 
         boxHeader.append(btnNew);
 
         $('#approval_all_8_hours').click(function () {
-            tableApproval.find('.child-table-approval .btnApproval')
+            var elBtnApproval = tableApproval.find('.child-table-approval .btnApproval');
+
+            console.log(elBtnApproval);
         });
     }
 

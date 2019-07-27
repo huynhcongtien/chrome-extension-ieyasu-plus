@@ -8,6 +8,8 @@ module.exports = function (grunt) {
         dist            : 'app/assets/dist',
         build           : 'app/assets/build',
         src             : 'app/assets/src',
+        manifestDir     : 'app/manifest',
+        pages           : 'app/pages',
         compressFileName: 'archive.zip'
     };
 
@@ -31,57 +33,41 @@ module.exports = function (grunt) {
     // show grunt task time
     require('time-grunt')(grunt);
 
-    grunt.registerTask('lint', [
-        'compress',
-        'jshint'
-    ]);
-
-    grunt.registerTask('build', [
+    grunt.registerTask('dev', [
         'clean',
         'copy',
         'sass',
         'cssmin',
-        'uglify'
+        'uglify:main_dev',
+        'uglify:background_dev',
+        'uglify:popup_core',
+        'uglify:setting_core',
+        'merge-json:dev',
+        'replace:dev',
+        'notify:watch_dev',
+        'watch'
     ]);
 
     grunt.registerTask('pro', [
-        'update_manifest:0',
         'prompt',
-        'build',
+        'clean',
+        'copy',
+        'sass',
+        'cssmin',
+        'uglify:main_pro',
+        'uglify:background_pro',
+        'uglify:popup_min',
+        'uglify:popup_core',
+        'uglify:setting_min',
+        'uglify:setting_core',
+        'merge-json:pro',
+        'replace:pro',
         'compress',
         'notify:watch_compress'
-    ]);
-
-    grunt.registerTask('dev', [
-        'update_manifest:1',
-        'build',
-        'notify:watch_dev',
-        'watch'
     ]);
 
     grunt.registerTask('default', [
         'dev'
     ]);
-
-    grunt.registerTask('update_manifest', function (is_not_production) {
-        var manifestFile   = 'app/manifest.json',
-            manifestObject = grunt.file.readJSON(manifestFile);//get file as json object
-
-        manifestObject.background.scripts = [
-            'assets/dist/js/background.min.js'
-        ];
-
-        if (typeof is_not_production === 'undefined') {
-            is_not_production = 1;
-        }
-
-        is_not_production = parseInt(is_not_production);
-
-        if (is_not_production) {
-            manifestObject.background.scripts.push('assets/src/js/chrome-reload.js');
-        }
-
-        grunt.file.write(manifestFile, JSON.stringify(manifestObject, null, 4));//serialize it back to file
-    });
 
 };

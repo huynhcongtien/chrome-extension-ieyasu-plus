@@ -25,7 +25,7 @@ module.exports = function () {
                     dest   : '<%= theme.build %>/js/',
                     src    : [
                         'bootstrap/dist/js/bootstrap.min.js',
-                        'jquery/dist/jquery.js',
+                        'jquery/dist/jquery.min.js',
                         'moment/min/moment.min.js',
                         'vue/dist/vue.min.js',
                         'notifyjs-browser/dist/notify.js'
@@ -48,7 +48,7 @@ module.exports = function () {
                     src    : [
                         'font-awesome/fonts/*'
                     ]
-                },
+                }
             ]
         }
     };

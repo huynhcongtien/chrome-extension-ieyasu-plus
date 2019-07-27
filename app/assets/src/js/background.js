@@ -206,7 +206,6 @@ var timeoutCheckoutFn = function () {
         if (!result.isNotification || !isWorkingDate(result.workingDays) ||
             (result.checkOutTime && moment(result.checkOutTime, 'x').format('YYYY-MM-DD') === today)
         ) {
-            console.log('adada hhhhd');
             return;
         }
 

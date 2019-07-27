@@ -6,34 +6,58 @@
 module.exports = function () {
 
     return {
-        options    : {
+        options       : {
             compress: {
                 drop_console: false
             },
             report  : 'min',
             mangle  : true
         },
-        main       : {
+        main_dev      : {
+            files: {
+                '<%= theme.dist %>/js/main.core.min.js': [
+                    '<%= theme.build %>/js/jquery.min.js',
+                    '<%= theme.build %>/js/moment.min.js'
+                ]
+            }
+        },
+        main_pro      : {
             files: {
                 '<%= theme.dist %>/js/main.min.js': [
-                    '<%= theme.build %>/js/jquery.js',
+                    '<%= theme.build %>/js/jquery.min.js',
                     '<%= theme.build %>/js/moment.min.js',
                     '<%= theme.src %>/js/content-script.js'
                 ]
             }
         },
-        popup      : {
+        background_dev: {
+            files: {
+                '<%= theme.dist %>/js/background.core.min.js': [
+                    '<%= theme.build %>/js/jquery.min.js',
+                    '<%= theme.build %>/js/moment.min.js'
+                ]
+            }
+        },
+        background_pro: {
+            files: {
+                '<%= theme.dist %>/js/background.min.js': [
+                    '<%= theme.build %>/js/jquery.min.js',
+                    '<%= theme.build %>/js/moment.min.js',
+                    '<%= theme.src %>/js/background.js'
+                ]
+            }
+        },
+        popup_min     : {
             files: {
                 '<%= theme.dist %>/js/popup.min.js': [
-                    '<%= theme.build %>/js/jquery.js',
                     '<%= theme.src %>/js/popup.js'
                 ]
             }
         },
-        coreSetting: {
+        popup_core    : {
             files: {
-                '<%= theme.dist %>/js/core.setting.min.js': [
-                    '<%= theme.build %>/js/jquery.js',
+                '<%= theme.dist %>/js/popup.core.min.js': [
+                    '<%= theme.build %>/js/jquery.min.js',
                     '<%= theme.build %>/js/bootstrap.min.js',
                     '<%= theme.build %>/js/moment.min.js',
                     '<%= theme.build %>/js/notify.js',
@@ -41,30 +65,21 @@ module.exports = function () {
                 ]
             }
         },
-        corePopup  : {
-            files: {
-                '<%= theme.dist %>/js/core.popup.min.js': [
-                    '<%= theme.build %>/js/jquery.js',
-                    '<%= theme.build %>/js/bootstrap.min.js',
-                    '<%= theme.build %>/js/moment.min.js',
-                    '<%= theme.build %>/js/notify.js',
-                    '<%= theme.build %>/js/vue.min.js'
-                ]
-            }
-        },
-        setting    : {
+        setting_min   : {
             files: {
                 '<%= theme.dist %>/js/setting.min.js': [
                     '<%= theme.src %>/js/setting.js'
                 ]
             }
         },
-        background : {
+        setting_core  : {
             files: {
-                '<%= theme.dist %>/js/background.min.js': [
-                    '<%= theme.build %>/js/jquery.js',
+                '<%= theme.dist %>/js/setting.core.min.js': [
+                    '<%= theme.build %>/js/jquery.min.js',
+                    '<%= theme.build %>/js/bootstrap.min.js',
                     '<%= theme.build %>/js/moment.min.js',
-                    '<%= theme.src %>/js/background.js'
+                    '<%= theme.build %>/js/notify.js',
+                    '<%= theme.build %>/js/vue.min.js'
                 ]
             }
         }
