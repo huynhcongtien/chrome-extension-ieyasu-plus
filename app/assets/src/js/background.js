@@ -142,11 +142,7 @@ var isWorkingDate = function (workingDays) {
         dayInWeek = date.getDay();
 
     // set notification checkout only workdays: 1 to 5 is Monday to Friday
-    if (workingDays.indexOf(dayInWeek) === -1) {
-        return false;
-    }
-
-    return true;
+    return workingDays.indexOf(dayInWeek) !== -1;
 };
 
 /**

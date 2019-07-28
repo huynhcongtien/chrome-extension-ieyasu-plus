@@ -2,6 +2,64 @@
 
 $(function () {
 
+    /**
+     * Set class of check-in/checkout time
+     * @param cellTime
+     * @returns {string}
+     */
+    function setClassLateEarlyTime(cellTime) {
+        var checkInActual = $.trim(cellTime.find('.item02').text()),
+            checkInEdited = $.trim(cellTime.find('.item01').text()),
+            cellTimeClass = 'not-change'
+        ;
+
+        if (!checkInActual && !checkInEdited) {
+            return;
+        }
+
+        if (checkInActual !== checkInEdited) {  // had update time
+            cellTimeClass = 'is-change';
+        } else if (checkInEdited > '10:00' && cellTime.hasClass('cellTime01')) { // working is late
+            cellTimeClass = 'is-late';
+        } else if (checkInEdited < '19:00' && cellTime.hasClass('cellTime02')) { // working is early
+            cellTimeClass = 'is-early';
+        }
+
+        return cellTimeClass;
+    }
+
+    /**
+     * Create button approval all
+     */
+    function createBtnApprovalAll() {
+        var boxHeader = $('#mainInner .reportHeader .box'),
+            btnNew    = '' +
+                '<a class="btn btnSubmit" href="javascript:void(0);"' +
+                '   id="approval_all_8_hours"' +
+                '>' +
+                '   Approval all full time' +
+                '</a>'
+        ;
+
+        boxHeader.append(btnNew);
+    }
+
+    /**
+     * Check day is working day
+     * @param {Object} workingDays
+     * @param {string} day
+     * @returns {boolean}
+     */
+    function checkDayIsWorking(workingDays, day) {
+        var monthlySelected = $('.monthly [name="select"]').find('option:selected').val(),
+            dayText         = monthlySelected + '-' + day,
+            date            = new Date(dayText),
+            dayInWeek       = date.getDay()
+        ;
+
+        return workingDays.indexOf(dayInWeek) !== -1;
+    }
+
     chrome.storage.sync.get(['isUseNewStyle', 'isMoveActionButton', 'test'], function (result) {
         if (!$('.workTable').length) {
             return;
@@ -145,44 +203,12 @@ $(function () {
         });
     });
 
-    /**
-     * Set class of check-in/checkout time
-     * @param cellTime
-     * @returns {string}
-     */
-    function setClassLateEarlyTime(cellTime) {
-        var checkInActual = $.trim(cellTime.find('.item02').text()),
-            checkInEdited = $.trim(cellTime.find('.item01').text()),
-            cellTimeClass = 'not-change'
-        ;
-
-        if (!checkInActual && !checkInEdited) {
-            return;
-        }
-
-        if (checkInActual !== checkInEdited) {  // had update time
-            cellTimeClass = 'is-change';
-        } else if (checkInEdited > '10:00' && cellTime.hasClass('cellTime01')) { // working is late
-            cellTimeClass = 'is-late';
-        } else if (checkInEdited < '19:00' && cellTime.hasClass('cellTime02')) { // working is early
-            cellTimeClass = 'is-early';
-        }
-
-        return cellTimeClass;
-    }
-
     var tableApproval = $('.tableApproval');
-
-    if (tableApproval.length) {
-        showTimeOnTableApproval();
-        createBtnApprovalAll();
-    }
 
     /**
      * Show log check-in/check out time on table approval
      */
-    function showTimeOnTableApproval()
-    {
+    function showTimeOnTableApproval(workingDays) {
         tableApproval.find('tr .cellMonth').each(function () {
             var cellMonth      = $(this),
                 cellComment    = cellMonth.parent('tr').find('.cellComment'),
@@ -209,7 +235,9 @@ $(function () {
                                 var classRow       = row.attr('class'),
                                     boxBtnApproval = btnApproval.parent(),
                                     cellType       = row.find('.cellType'),
+                                    dateTypeText   = $.trim(cellType.find('.item01').text()),
                                     cellDate       = row.find('.cellDate'),
+                                    dateValue      = cellDate.find('span.date').text(),
                                     cellTimeStart  = row.find('.cellTime.cellTime01.cellBreak'),
                                     cellTimeEnd    = row.find('.cellTime.cellTime02'),
                                     cellTimeTotal  = row.find('.cellTime.cellTime07.cellBreak'),
@@ -230,6 +258,14 @@ $(function () {
                                     classCheckOut = setClassLateEarlyTime(cellTimeEnd),
                                     classMemo     = 'not-empty'
                                 ;
+
+                                // check day is valid working time
+                                if ((classCheckIn === 'not-change' && classCheckOut === 'not-change' &&
+                                    classWorkTime === 'time-full') ||
+                                    (!checkDayIsWorking(workingDays, dateValue) && dateTypeText === 'Public holiday')
+                                ) {
+                                    classRow += ' time-is-valid';
+                                }
 
                                 cellDate.find('.view_work').remove();
 
@@ -255,7 +291,7 @@ $(function () {
                         childTable = '<div class="box-tb-child"><table class="child-table-approval">' + childTable + '</table></div>';
                         cellComment.append(childTable);
                     },
-                    error   : function (xhr, status, error) {
+                    error   : function (xhr) {
                         console.log(xhr);
                     }
                 });
@@ -263,25 +299,24 @@ $(function () {
         });
     }
 
-    function createBtnApprovalAll()
-    {
-        var boxHeader = $('#mainInner .reportHeader .box'),
-            btnNew    = '' +
-                '<a class="btn btnSubmit" href="javascript:void(0);"' +
-                '   id="approval_all_8_hours"' +
-                '>' +
-                '   Approval all full time' +
-                '</a>'
-        ;
+    chrome.storage.sync.get(['workingDays'], function (result) {
+        if (tableApproval.length) {
+            showTimeOnTableApproval(result.workingDays);
+            createBtnApprovalAll();
+        }
+    });
 
-        boxHeader.append(btnNew);
+    $('#mainInner').on('click', '#approval_all_8_hours', function () {
+        var elTimeValid = tableApproval.find('.child-table-approval .time-is-valid');
 
-        $('#approval_all_8_hours').click(function () {
-            var elBtnApproval = tableApproval.find('.child-table-approval .btnApproval');
+        $.each(elTimeValid, function () {
+            var elRow         = $(this),
+                elBtnApproval = elRow.find('.btnApproval')
+            ;
 
-            console.log(elBtnApproval);
+            elBtnApproval.text('aaaaaaaaaaaa');
         });
-    }
+    });
 
     /**
      * Remove row after approval
