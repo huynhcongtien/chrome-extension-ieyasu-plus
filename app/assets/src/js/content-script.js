@@ -209,7 +209,25 @@ $(function () {
      * Show log check-in/check out time on table approval
      */
     function showTimeOnTableApproval(workingDays) {
-        tableApproval.find('tr .cellMonth').each(function () {
+        var elCellMonth      = tableApproval.find('tr .cellMonth'),
+            linksObject      = [],
+            numberLinkObject = 0
+        ;
+
+        elCellMonth.each(function () {
+            var cellMonth      = $(this),
+                cellComment    = cellMonth.parent('tr').find('.cellComment'),
+                elLinkApproval = cellMonth.find('a')
+            ;
+
+            if (elLinkApproval.length) {
+                numberLinkObject++;
+            }
+        });
+
+        var numberAjaxComplete = 0;
+
+        elCellMonth.each(function () {
             var cellMonth      = $(this),
                 cellComment    = cellMonth.parent('tr').find('.cellComment'),
                 elLinkApproval = cellMonth.find('a')
@@ -217,7 +235,6 @@ $(function () {
 
             if (elLinkApproval.length) {
                 var linkApproval = elLinkApproval.get(0).href;
-
                 $.ajax({
                     url     : linkApproval,
                     type    : 'GET',
@@ -225,11 +242,13 @@ $(function () {
                     success : function (result) {
                         var contentHtml  = $(result),
                             tableWorkRow = contentHtml.find('#editGraphTable tbody tr'),
-                            childTable   = '';
+                            childTable   = ''
+                        ;
 
                         $.each(tableWorkRow, function () {
                             var row         = $(this),
-                                btnApproval = row.find('.view_work .btnApproval');
+                                btnApproval = row.find('.view_work .btnApproval')
+                            ;
 
                             if (btnApproval.length) {
                                 var classRow       = row.attr('class'),
@@ -293,6 +312,13 @@ $(function () {
                     },
                     error   : function (xhr) {
                         console.log(xhr);
+                    },
+                    complete: function () {
+                        numberAjaxComplete++;
+
+                        if (numberAjaxComplete === numberLinkObject) {
+                            createBtnApprovalAll();
+                        }
                     }
                 });
             }
@@ -302,7 +328,6 @@ $(function () {
     chrome.storage.sync.get(['workingDays'], function (result) {
         if (tableApproval.length) {
             showTimeOnTableApproval(result.workingDays);
-            createBtnApprovalAll();
         }
     });
 
@@ -311,10 +336,12 @@ $(function () {
 
         $.each(elTimeValid, function () {
             var elRow         = $(this),
-                elBtnApproval = elRow.find('.btnApproval')
+                elBtnApproval = elRow.find('.btnApproval'),
+                linkApproval  = elBtnApproval.attr('href')
             ;
 
-            elBtnApproval.text('aaaaaaaaaaaa');
+            console.log(linkApproval);
+            // elBtnApproval.trigger('click');
         });
     });
 
