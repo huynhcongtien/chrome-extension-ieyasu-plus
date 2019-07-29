@@ -296,7 +296,10 @@ $(function () {
 
                                 childTable += '' +
                                     '<tr class="' + classRow + '">' +
-                                    '   <td class="date">' + cellDate.html() + '</td>' +
+                                    '   <td class="date">' +
+                                    '       <div class="date-day">' + cellDate.html() + '</div>' +
+                                    '       <div class="date-status"><img src="' + chrome.runtime.getURL('assets/dist/img/sign_tick.png') + '"/></div>' +
+                                    '   </td>' +
                                     '   <td class="day-type">' + cellType.html() + '</td>' +
                                     '   <td class="time time-check ' + classCheckIn + '">' + cellTimeStart.html() + '</td>' +
                                     '   <td class="time time-check ' + classCheckOut + '">' + cellTimeEnd.html() + '</td>' +
@@ -311,7 +314,7 @@ $(function () {
                         cellComment.append(childTable);
                     },
                     error   : function (xhr) {
-                        console.log(xhr);
+                        console.info(xhr);
                     },
                     complete: function () {
                         numberAjaxComplete++;
@@ -340,8 +343,17 @@ $(function () {
                 linkApproval  = elBtnApproval.attr('href')
             ;
 
-            console.log(linkApproval);
-            // elBtnApproval.trigger('click');
+            $.ajax({
+                url     : linkApproval,
+                type    : 'GET',
+                dataType: 'html',
+                success : function (result) {
+                    elRow.remove();
+                },
+                error   : function (xhr) {
+                    console.info(xhr);
+                }
+            });
         });
     });
 
