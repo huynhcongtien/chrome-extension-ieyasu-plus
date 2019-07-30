@@ -20,6 +20,9 @@
         "storage",
         "tabs"
     ],
+    "web_accessible_resources": [
+        "assets/dist/img/*.png"
+    ],
     "content_scripts": [
         {
             "matches": [

@@ -116,6 +116,13 @@ td.time-not-full, .tableNormal tr:hover td.time-not-full {
                         }
                     }
                 }
+                .date-status {
+                    text-align: center;
+                    img {
+                        width: 16px;
+                        height: 16px;
+                    }
+                }
             }
         }
     }

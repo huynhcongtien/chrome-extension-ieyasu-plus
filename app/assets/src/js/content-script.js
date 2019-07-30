@@ -275,7 +275,8 @@ $(function () {
 
                                 var classCheckIn  = setClassLateEarlyTime(cellTimeStart),
                                     classCheckOut = setClassLateEarlyTime(cellTimeEnd),
-                                    classMemo     = 'not-empty'
+                                    classMemo     = 'not-empty',
+                                    isValidTime   = false
                                 ;
 
                                 // check day is valid working time
@@ -283,6 +284,7 @@ $(function () {
                                     classWorkTime === 'time-full') ||
                                     (!checkDayIsWorking(workingDays, dateValue) && dateTypeText === 'Public holiday')
                                 ) {
+                                    isValidTime = true;
                                     classRow += ' time-is-valid';
                                 }
 
@@ -294,16 +296,28 @@ $(function () {
                                     classMemo = 'is-approval';
                                 }
 
+                                var imgCheckPath = 'assets/dist/img/icon-checked.png';
+
+                                if (!isValidTime) {
+                                    imgCheckPath = 'assets/dist/img/icon-unchecked.png';
+                                }
+
+                                var imgCheckSrc = chrome.runtime.getURL(imgCheckPath);
+
                                 childTable += '' +
                                     '<tr class="' + classRow + '">' +
                                     '   <td class="date">' +
                                     '       <div class="date-day">' + cellDate.html() + '</div>' +
-                                    '       <div class="date-status"><img src="' + chrome.runtime.getURL('assets/dist/img/sign_tick.png') + '"/></div>' +
+                                    '       <div class="date-status">' +
+                                    '           <img alt="Checked" src="' + imgCheckSrc + '"/>' +
+                                    '       </div>' +
                                     '   </td>' +
                                     '   <td class="day-type">' + cellType.html() + '</td>' +
                                     '   <td class="time time-check ' + classCheckIn + '">' + cellTimeStart.html() + '</td>' +
                                     '   <td class="time time-check ' + classCheckOut + '">' + cellTimeEnd.html() + '</td>' +
-                                    '   <td class="time ' + classWorkTime + '" nowrap>' + cellTimeTotal.html() + '</td>' +
+                                    '   <td class="time time-total ' + classWorkTime + '" nowrap>' +
+                                    '       <div class="time-working">' + cellTimeTotal.html() + '</div>' +
+                                    '   </td>' +
                                     '   <td class="memo ' + classMemo + '">' + cellMemo.html() + '</td>' +
                                     '   <td class="btn-group">' + boxBtnApproval.html() + '</td>' +
                                     '</tr>';
