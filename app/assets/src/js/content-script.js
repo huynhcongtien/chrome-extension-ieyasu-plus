@@ -14,7 +14,7 @@ $(function () {
         ;
 
         if (!checkInActual && !checkInEdited) {
-            return;
+            return null;
         }
 
         if (checkInActual !== checkInEdited) {  // had update time
@@ -34,7 +34,7 @@ $(function () {
     function createBtnApprovalAll() {
         var boxHeader = $('#mainInner .reportHeader .box'),
             btnNew    = '' +
-                '<a class="btn btnSubmit" href="javascript:void(0);"' +
+                '<a class="btn btnSubmit disabled" href="javascript:void(0);"' +
                 '   id="approval_all_8_hours"' +
                 '>' +
                 '   Approval all full time' +
@@ -211,7 +211,8 @@ $(function () {
     function showTimeOnTableApproval(workingDays) {
         var elCellMonth      = tableApproval.find('tr .cellMonth'),
             linksObject      = [],
-            numberLinkObject = 0
+            numberLinkObject = 0,
+            loadingIcon      = new LoadingIcon({element: '#approval_all_8_hours'})
         ;
 
         elCellMonth.each(function () {
@@ -334,7 +335,7 @@ $(function () {
                         numberAjaxComplete++;
 
                         if (numberAjaxComplete === numberLinkObject) {
-                            createBtnApprovalAll();
+                            loadingIcon.removeIconLoading().removeDisabled();
                         }
                     }
                 });
@@ -344,11 +345,12 @@ $(function () {
 
     chrome.storage.sync.get(['workingDays'], function (result) {
         if (tableApproval.length) {
+            createBtnApprovalAll();
             showTimeOnTableApproval(result.workingDays);
         }
     });
 
-    $('#mainInner').on('click', '#approval_all_8_hours', function () {
+    $('#mainInner').on('click', '#approval_all_8_hours:not(.disabled)', function () {
         var elTimeValid = tableApproval.find('.child-table-approval .time-is-valid');
 
         $.each(elTimeValid, function () {
@@ -381,3 +383,58 @@ $(function () {
     ;
 
 });
+
+var LoadingIcon = function (configs) {
+    this.init(configs);
+
+    if (this.options.autoCreateIcon) {
+        this.addIconLoading();
+    }
+
+    if (this.options.autoDisabled) {
+        this.addDisabled();
+    }
+};
+
+LoadingIcon.prototype.init = function (configs) {
+    var _defaults = {
+        element       : '.loading',
+        autoCreateIcon: true,
+        autoDisabled  : true
+    };
+    this.options  = $.extend(_defaults, configs);
+    return this;
+};
+
+LoadingIcon.prototype.addIconLoading = function () {
+    var element   = $(this.options.element),
+        elSpinner = element.find('.fa-spinner')
+    ;
+
+    if (elSpinner.length) {
+        elSpinner.show();
+    } else {
+        var textOld = element.text(),
+            textNew = '<i class="fa fa-spinner fa-pulse fa-fw"></i> ' + textOld
+        ;
+
+        element.html(textNew);
+    }
+
+    return this;
+};
+
+LoadingIcon.prototype.removeIconLoading = function () {
+    $(this.options.element).find('.fa-spinner').remove();
+    return this;
+};
+
+LoadingIcon.prototype.addDisabled = function () {
+    $(this.options.element).addClass('disabled');
+    return this;
+};
+
+LoadingIcon.prototype.removeDisabled = function () {
+    $(this.options.element).removeClass('disabled');
+    return this;
+};

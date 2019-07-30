@@ -76,6 +76,8 @@ td.time-not-full, .tableNormal tr:hover td.time-not-full {
 .box-tb-child {
     display: inline-block;
     width: 100%;
+    margin: 0 !important;
+    background-color: #fff;
     .child-table-approval {
         width: 100%;
         .time-not-full {
@@ -139,5 +141,47 @@ td.time-not-full, .tableNormal tr:hover td.time-not-full {
     .dayGreen td {
         color: #408135 !important;
         background: #edf9eb !important;
+    }
+}
+#approval_all_8_hours {
+    &.disabled {
+        background-color: #b57b46;
+    }
+}
+
+$table-approval-border-color: #bfbfbf;
+@mixin table-approval-border-color {
+    border-right-color: $table-approval-border-color !important;
+    border-left-color: $table-approval-border-color !important;
+}
+
+//CSS of them
+#pageApproval {
+    .tableApproval {
+        > thead {
+            > tr {
+                > th {
+                    @include table-approval-border-color;
+                }
+            }
+        }
+        > tbody {
+            > tr:nth-of-type(odd) {
+                background-color: rgba(0, 0, 0, .05);
+            }
+            > tr {
+                > td {
+                    @include table-approval-border-color;
+                }
+                &:hover {
+                    > td {
+                        background-color: rgba(255, 249, 214, 0.5) !important;
+                    }
+                }
+            }
+        }
+        .cellEname {
+            word-break: normal !important;
+        }
     }
 }
