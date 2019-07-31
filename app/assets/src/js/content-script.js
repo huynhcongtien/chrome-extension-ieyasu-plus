@@ -45,6 +45,22 @@ $(function () {
     }
 
     /**
+     * Create button get all log time
+     */
+    function createBtnGetAllLogTime() {
+        var boxHeader = $('#mainInner .reportHeader .box'),
+            btnNew    = '' +
+                '<a class="btn btnSubmit disabled" href="javascript:void(0);"' +
+                '   id="get_all_log_time"' +
+                '>' +
+                '   Get all log time' +
+                '</a>'
+        ;
+
+        boxHeader.append(btnNew);
+    }
+
+    /**
      * Check day is working day
      * @param {Object} workingDays
      * @param {string} day
@@ -60,7 +76,7 @@ $(function () {
         return workingDays.indexOf(dayInWeek) !== -1;
     }
 
-    chrome.storage.sync.get(['isUseNewStyle', 'isMoveActionButton', 'test'], function (result) {
+    chrome.storage.sync.get(['isUseNewStyle', 'isMoveActionButton'], function (result) {
         if (!$('.workTable').length) {
             return;
         }
@@ -209,15 +225,13 @@ $(function () {
      * Show log check-in/check out time on table approval
      */
     function showTimeOnTableApproval(workingDays) {
-        var elCellMonth      = tableApproval.find('tr .cellMonth'),
-            linksObject      = [],
-            numberLinkObject = 0,
-            loadingIcon      = new LoadingIcon({element: '#approval_all_8_hours'})
+        var elCellMonth          = tableApproval.find('tr .cellMonth'),
+            numberLinkObject     = 0,
+            isHasNumberLogTimeOK = 0
         ;
 
         elCellMonth.each(function () {
             var cellMonth      = $(this),
-                cellComment    = cellMonth.parent('tr').find('.cellComment'),
                 elLinkApproval = cellMonth.find('a')
             ;
 
@@ -297,20 +311,20 @@ $(function () {
                                     classMemo = 'is-approval';
                                 }
 
-                                var imgCheckPath = 'assets/dist/img/icon-checked.png';
+                                var checkIconClass = 'status-ok fa-check-circle';
 
                                 if (!isValidTime) {
-                                    imgCheckPath = 'assets/dist/img/icon-unchecked.png';
+                                    checkIconClass = 'status-warning fa-exclamation-triangle';
+                                } else {
+                                    isHasNumberLogTimeOK++;
                                 }
-
-                                var imgCheckSrc = chrome.runtime.getURL(imgCheckPath);
 
                                 childTable += '' +
                                     '<tr class="' + classRow + '">' +
                                     '   <td class="date">' +
                                     '       <div class="date-day">' + cellDate.html() + '</div>' +
                                     '       <div class="date-status">' +
-                                    '           <img alt="Checked" src="' + imgCheckSrc + '"/>' +
+                                    '           <i class="fa ' + checkIconClass + '" aria-hidden="true"></i>' +
                                     '       </div>' +
                                     '   </td>' +
                                     '   <td class="day-type">' + cellType.html() + '</td>' +
@@ -335,7 +349,11 @@ $(function () {
                         numberAjaxComplete++;
 
                         if (numberAjaxComplete === numberLinkObject) {
-                            loadingIcon.removeIconLoading().removeDisabled();
+                            loadingIconGetLog.removeIconLoading().removeDisabled();
+
+                            if (isHasNumberLogTimeOK) {
+                                loadingIconApproval.removeDisabled();
+                            }
                         }
                     }
                 });
@@ -343,15 +361,37 @@ $(function () {
         });
     }
 
+    let loadingIconApproval = new LoadingIcon({
+            element       : '#approval_all_8_hours',
+            autoCreateIcon: false
+        }),
+        loadingIconGetLog   = new LoadingIcon({
+            element       : '#get_all_log_time',
+            autoCreateIcon: false
+        })
+    ;
+
     chrome.storage.sync.get(['workingDays'], function (result) {
         if (tableApproval.length) {
             createBtnApprovalAll();
+            createBtnGetAllLogTime();
+            loadingIconGetLog.addIconLoading();
             showTimeOnTableApproval(result.workingDays);
         }
     });
 
+    /**
+     * Approval all request
+     */
     $('#mainInner').on('click', '#approval_all_8_hours:not(.disabled)', function () {
-        var elTimeValid = tableApproval.find('.child-table-approval .time-is-valid');
+        var elTimeValid        = tableApproval.find('.child-table-approval .time-is-valid'),
+            numberLink         = elTimeValid.length,
+            numberAjaxComplete = 0
+        ;
+
+        if (numberLink) {
+            loadingIconApproval.addIconLoading().addDisabled();
+        }
 
         $.each(elTimeValid, function () {
             var elRow         = $(this),
@@ -368,8 +408,24 @@ $(function () {
                 },
                 error   : function (xhr) {
                     console.info(xhr);
+                },
+                complete: function () {
+                    numberAjaxComplete++;
+
+                    if (numberAjaxComplete === numberLink) {
+                        loadingIconApproval.removeIconLoading().removeDisabled();
+                    }
                 }
             });
+        });
+    }).on('click', '#get_all_log_time:not(.disabled)', function () {
+        // remove all child table in log
+        $('.box-tb-child').remove();
+
+        chrome.storage.sync.get(['workingDays'], function (result) {
+            loadingIconApproval.addDisabled();
+            loadingIconGetLog.addIconLoading().addDisabled();
+            showTimeOnTableApproval(result.workingDays);
         });
     });
 

@@ -104,6 +104,7 @@ td.time-not-full, .tableNormal tr:hover td.time-not-full {
                     }
                     &.not-empty {
                         background: #ce6e6e;
+                        color: #fff;
                     }
                     &.is-approval {
                         background: #b9d6b9;
@@ -120,9 +121,12 @@ td.time-not-full, .tableNormal tr:hover td.time-not-full {
                 }
                 .date-status {
                     text-align: center;
-                    img {
-                        width: 16px;
-                        height: 16px;
+                    font-size: 16px;
+                    .status-ok {
+                        color: #1db70c;
+                    }
+                    .status-warning {
+                        color: #ffa500;
                     }
                 }
             }
@@ -143,9 +147,12 @@ td.time-not-full, .tableNormal tr:hover td.time-not-full {
         background: #edf9eb !important;
     }
 }
-#approval_all_8_hours {
+.btnSubmit {
     &.disabled {
-        background-color: #b57b46;
+        background-color: #b57b46 !important;
+        &:hover {
+            cursor: not-allowed;
+        }
     }
 }
 
