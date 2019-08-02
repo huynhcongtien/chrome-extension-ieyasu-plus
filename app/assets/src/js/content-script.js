@@ -225,139 +225,136 @@ $(function () {
      * Show log check-in/check out time on table approval
      */
     function showTimeOnTableApproval(workingDays) {
-        var elCellMonth          = tableApproval.find('tr .cellMonth'),
-            numberLinkObject     = 0,
-            isHasNumberLogTimeOK = 0
+        var isHasLogTimeOK     = false,
+            elRows             = tableApproval.find('tbody tr'),
+            numberRow          = elRows.length,
+            numberAjaxComplete = 0
         ;
 
-        elCellMonth.each(function () {
-            var cellMonth      = $(this),
-                elLinkApproval = cellMonth.find('a')
+        if (!numberRow) {
+            loadingIconGetLog.removeIconLoading().removeDisabled();
+        }
+
+        elRows.each(function () {
+            var elRow          = $(this),
+                cellName       = elRow.find('.cellEname'),
+                cellComment    = elRow.find('.cellComment'),
+                elLinkApproval = cellName.find('a')
             ;
 
-            if (elLinkApproval.length) {
-                numberLinkObject++;
+            if (!elLinkApproval.length) {
+                return true;    // break;
             }
-        });
 
-        var numberAjaxComplete = 0;
+            var linkApproval = elLinkApproval.get(0).href;
 
-        elCellMonth.each(function () {
-            var cellMonth      = $(this),
-                cellComment    = cellMonth.parent('tr').find('.cellComment'),
-                elLinkApproval = cellMonth.find('a')
-            ;
+            $.ajax({
+                url     : linkApproval,
+                type    : 'GET',
+                dataType: 'html',
+                success : function (result) {
+                    var contentHtml  = $(result),
+                        tableWorkRow = contentHtml.find('#editGraphTable tbody tr'),
+                        childTable   = ''
+                    ;
 
-            if (elLinkApproval.length) {
-                var linkApproval = elLinkApproval.get(0).href;
-                $.ajax({
-                    url     : linkApproval,
-                    type    : 'GET',
-                    dataType: 'html',
-                    success : function (result) {
-                        var contentHtml  = $(result),
-                            tableWorkRow = contentHtml.find('#editGraphTable tbody tr'),
-                            childTable   = ''
+                    $.each(tableWorkRow, function () {
+                        var row         = $(this),
+                            btnApproval = row.find('.view_work .btnApproval')
                         ;
 
-                        $.each(tableWorkRow, function () {
-                            var row         = $(this),
-                                btnApproval = row.find('.view_work .btnApproval')
+                        if (btnApproval.length) {
+                            var classRow       = row.attr('class'),
+                                boxBtnApproval = btnApproval.parent(),
+                                cellType       = row.find('.cellType'),
+                                dateTypeText   = $.trim(cellType.find('.item01').text()),
+                                cellDate       = row.find('.cellDate'),
+                                dateValue      = cellDate.find('span.date').text(),
+                                cellTimeStart  = row.find('.cellTime.cellTime01.cellBreak'),
+                                cellTimeEnd    = row.find('.cellTime.cellTime02'),
+                                cellTimeTotal  = row.find('.cellTime.cellTime07.cellBreak'),
+                                cellMemo       = row.find('.cellMemo'),
+                                workTimeTotal  = $.trim(cellTimeTotal.text()),
+                                classWorkTime  = ''
                             ;
 
-                            if (btnApproval.length) {
-                                var classRow       = row.attr('class'),
-                                    boxBtnApproval = btnApproval.parent(),
-                                    cellType       = row.find('.cellType'),
-                                    dateTypeText   = $.trim(cellType.find('.item01').text()),
-                                    cellDate       = row.find('.cellDate'),
-                                    dateValue      = cellDate.find('span.date').text(),
-                                    cellTimeStart  = row.find('.cellTime.cellTime01.cellBreak'),
-                                    cellTimeEnd    = row.find('.cellTime.cellTime02'),
-                                    cellTimeTotal  = row.find('.cellTime.cellTime07.cellBreak'),
-                                    cellMemo       = row.find('.cellMemo'),
-                                    workTimeTotal  = $.trim(cellTimeTotal.text()),
-                                    classWorkTime  = ''
-                                ;
+                            if (workTimeTotal !== '0:00') {
+                                classWorkTime = 'time-full';
 
-                                if (workTimeTotal !== '0:00') {
-                                    classWorkTime = 'time-full';
-
-                                    if (workTimeTotal !== '8:00') {
-                                        classWorkTime = 'time-not-full';
-                                    }
+                                if (workTimeTotal !== '8:00') {
+                                    classWorkTime = 'time-not-full';
                                 }
-
-                                var classCheckIn  = setClassLateEarlyTime(cellTimeStart),
-                                    classCheckOut = setClassLateEarlyTime(cellTimeEnd),
-                                    classMemo     = 'not-empty',
-                                    isValidTime   = false
-                                ;
-
-                                // check day is valid working time
-                                if ((classCheckIn === 'not-change' && classCheckOut === 'not-change' &&
-                                    classWorkTime === 'time-full') ||
-                                    (!checkDayIsWorking(workingDays, dateValue) && dateTypeText === 'Public holiday')
-                                ) {
-                                    isValidTime = true;
-                                    classRow += ' time-is-valid';
-                                }
-
-                                cellDate.find('.view_work').remove();
-
-                                if (!cellMemo.find('div:first-child').text()) {
-                                    classMemo = 'empty';
-                                } else if (cellMemo.find('div:last-child').text()) {
-                                    classMemo = 'is-approval';
-                                }
-
-                                var checkIconClass = 'status-ok fa-check-circle';
-
-                                if (!isValidTime) {
-                                    checkIconClass = 'status-warning fa-exclamation-triangle';
-                                } else {
-                                    isHasNumberLogTimeOK++;
-                                }
-
-                                childTable += '' +
-                                    '<tr class="' + classRow + '">' +
-                                    '   <td class="date">' +
-                                    '       <div class="date-day">' + cellDate.html() + '</div>' +
-                                    '       <div class="date-status">' +
-                                    '           <i class="fa ' + checkIconClass + '" aria-hidden="true"></i>' +
-                                    '       </div>' +
-                                    '   </td>' +
-                                    '   <td class="day-type">' + cellType.html() + '</td>' +
-                                    '   <td class="time time-check ' + classCheckIn + '">' + cellTimeStart.html() + '</td>' +
-                                    '   <td class="time time-check ' + classCheckOut + '">' + cellTimeEnd.html() + '</td>' +
-                                    '   <td class="time time-total ' + classWorkTime + '" nowrap>' +
-                                    '       <div class="time-working">' + cellTimeTotal.html() + '</div>' +
-                                    '   </td>' +
-                                    '   <td class="memo ' + classMemo + '">' + cellMemo.html() + '</td>' +
-                                    '   <td class="btn-group">' + boxBtnApproval.html() + '</td>' +
-                                    '</tr>';
                             }
-                        });
 
-                        childTable = '<div class="box-tb-child"><table class="child-table-approval">' + childTable + '</table></div>';
-                        cellComment.append(childTable);
-                    },
-                    error   : function (xhr) {
-                        console.info(xhr);
-                    },
-                    complete: function () {
-                        numberAjaxComplete++;
+                            var classCheckIn  = setClassLateEarlyTime(cellTimeStart),
+                                classCheckOut = setClassLateEarlyTime(cellTimeEnd),
+                                classMemo     = 'not-empty',
+                                isValidTime   = false
+                            ;
 
-                        if (numberAjaxComplete === numberLinkObject) {
-                            loadingIconGetLog.removeIconLoading().removeDisabled();
-
-                            if (isHasNumberLogTimeOK) {
-                                loadingIconApproval.removeDisabled();
+                            // check day is valid working time
+                            if ((classCheckIn === 'not-change' && classCheckOut === 'not-change' &&
+                                classWorkTime === 'time-full') ||
+                                (!checkDayIsWorking(workingDays, dateValue) && dateTypeText === 'Public holiday')
+                            ) {
+                                isValidTime = true;
+                                classRow += ' time-is-valid';
                             }
+
+                            cellDate.find('.view_work').remove();
+
+                            if (!cellMemo.find('div:first-child').text()) {
+                                classMemo = 'empty';
+                            } else if (cellMemo.find('div:last-child').text()) {
+                                classMemo = 'is-approval';
+                            }
+
+                            var checkIconClass = 'status-ok fa-check-circle';
+
+                            if (!isValidTime) {
+                                checkIconClass = 'status-warning fa-exclamation-triangle';
+                            } else {
+                                isHasLogTimeOK = true;
+                            }
+
+                            childTable += '' +
+                                '<tr class="' + classRow + '">' +
+                                '   <td class="date">' +
+                                '       <div class="date-day">' + cellDate.html() + '</div>' +
+                                '       <div class="date-status">' +
+                                '           <i class="fa ' + checkIconClass + '" aria-hidden="true"></i>' +
+                                '       </div>' +
+                                '   </td>' +
+                                '   <td class="day-type">' + cellType.html() + '</td>' +
+                                '   <td class="time time-check ' + classCheckIn + '">' + cellTimeStart.html() + '</td>' +
+                                '   <td class="time time-check ' + classCheckOut + '">' + cellTimeEnd.html() + '</td>' +
+                                '   <td class="time time-total ' + classWorkTime + '" nowrap>' +
+                                '       <div class="time-working">' + cellTimeTotal.html() + '</div>' +
+                                '   </td>' +
+                                '   <td class="memo ' + classMemo + '">' + cellMemo.html() + '</td>' +
+                                '   <td class="btn-group">' + boxBtnApproval.html() + '</td>' +
+                                '</tr>';
+                        }
+                    });
+
+                    childTable = '<div class="box-tb-child"><table class="child-table-approval">' + childTable + '</table></div>';
+                    cellComment.append(childTable);
+                },
+                error   : function (xhr) {
+                    console.info(xhr);
+                },
+                complete: function () {
+                    numberAjaxComplete++;
+
+                    if (numberAjaxComplete === numberRow) {
+                        loadingIconGetLog.removeIconLoading().removeDisabled();
+
+                        if (isHasLogTimeOK) {
+                            loadingIconApproval.removeDisabled();
                         }
                     }
-                });
-            }
+                }
+            });
         });
     }
 
@@ -413,7 +410,7 @@ $(function () {
                     numberAjaxComplete++;
 
                     if (numberAjaxComplete === numberLink) {
-                        loadingIconApproval.removeIconLoading().removeDisabled();
+                        loadingIconApproval.removeIconLoading();
                     }
                 }
             });
