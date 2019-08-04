@@ -49,7 +49,6 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('pro', [
-        'prompt',
         'clean',
         'copy',
         'sass',
@@ -60,6 +59,7 @@ module.exports = function (grunt) {
         'uglify:popup_core',
         'uglify:setting_min',
         'uglify:setting_core',
+        'prompt',
         'merge-json:pro',
         'replace:pro',
         'compress',

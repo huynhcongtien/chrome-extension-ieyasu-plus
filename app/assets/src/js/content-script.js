@@ -1,5 +1,62 @@
 'use strict';
 
+// Start LoadingIcon
+var LoadingIcon = function (configs) {
+    this.init(configs);
+
+    if (this.options.autoCreateIcon) {
+        this.addIconLoading();
+    }
+
+    if (this.options.autoDisabled) {
+        this.addDisabled();
+    }
+};
+
+LoadingIcon.prototype.init = function (configs) {
+    var _defaults = {
+        element       : '.loading',
+        autoCreateIcon: true,
+        autoDisabled  : true
+    };
+    this.options  = $.extend(_defaults, configs);
+    return this;
+};
+
+LoadingIcon.prototype.addIconLoading = function () {
+    var element   = $(this.options.element),
+        elSpinner = element.find('.fa-spinner')
+    ;
+
+    if (elSpinner.length) {
+        elSpinner.show();
+    } else {
+        var textOld = element.text(),
+            textNew = '<i class="fa fa-spinner fa-pulse fa-fw"></i> ' + textOld
+        ;
+
+        element.html(textNew);
+    }
+
+    return this;
+};
+
+LoadingIcon.prototype.removeIconLoading = function () {
+    $(this.options.element).find('.fa-spinner').remove();
+    return this;
+};
+
+LoadingIcon.prototype.addDisabled = function () {
+    $(this.options.element).addClass('disabled');
+    return this;
+};
+
+LoadingIcon.prototype.removeDisabled = function () {
+    $(this.options.element).removeClass('disabled');
+    return this;
+};
+// End LoadingIcon
+
 $(function () {
 
     /**
@@ -219,6 +276,16 @@ $(function () {
         });
     });
 
+    var loadingIconApproval = new LoadingIcon({
+            element       : '#approval_all_8_hours',
+            autoCreateIcon: false
+        }),
+        loadingIconGetLog   = new LoadingIcon({
+            element       : '#get_all_log_time',
+            autoCreateIcon: false
+        })
+    ;
+
     var tableApproval = $('.tableApproval');
 
     /**
@@ -358,16 +425,6 @@ $(function () {
         });
     }
 
-    let loadingIconApproval = new LoadingIcon({
-            element       : '#approval_all_8_hours',
-            autoCreateIcon: false
-        }),
-        loadingIconGetLog   = new LoadingIcon({
-            element       : '#get_all_log_time',
-            autoCreateIcon: false
-        })
-    ;
-
     chrome.storage.sync.get(['workingDays'], function (result) {
         if (tableApproval.length) {
             createBtnApprovalAll();
@@ -400,7 +457,7 @@ $(function () {
                 url     : linkApproval,
                 type    : 'GET',
                 dataType: 'html',
-                success : function (result) {
+                success : function () {
                     elRow.remove();
                 },
                 error   : function (xhr) {
@@ -436,58 +493,3 @@ $(function () {
     ;
 
 });
-
-var LoadingIcon = function (configs) {
-    this.init(configs);
-
-    if (this.options.autoCreateIcon) {
-        this.addIconLoading();
-    }
-
-    if (this.options.autoDisabled) {
-        this.addDisabled();
-    }
-};
-
-LoadingIcon.prototype.init = function (configs) {
-    var _defaults = {
-        element       : '.loading',
-        autoCreateIcon: true,
-        autoDisabled  : true
-    };
-    this.options  = $.extend(_defaults, configs);
-    return this;
-};
-
-LoadingIcon.prototype.addIconLoading = function () {
-    var element   = $(this.options.element),
-        elSpinner = element.find('.fa-spinner')
-    ;
-
-    if (elSpinner.length) {
-        elSpinner.show();
-    } else {
-        var textOld = element.text(),
-            textNew = '<i class="fa fa-spinner fa-pulse fa-fw"></i> ' + textOld
-        ;
-
-        element.html(textNew);
-    }
-
-    return this;
-};
-
-LoadingIcon.prototype.removeIconLoading = function () {
-    $(this.options.element).find('.fa-spinner').remove();
-    return this;
-};
-
-LoadingIcon.prototype.addDisabled = function () {
-    $(this.options.element).addClass('disabled');
-    return this;
-};
-
-LoadingIcon.prototype.removeDisabled = function () {
-    $(this.options.element).removeClass('disabled');
-    return this;
-};
