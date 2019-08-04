@@ -2,6 +2,9 @@
 
 /**
  * Watch for changes in live edit
+ *  Don't watch files:
+ * - app/assets/src/js/popup.js
+ * - other file, example setting's jquery
  */
 module.exports = function () {
 
@@ -44,11 +47,6 @@ module.exports = function () {
         js_popup     : {
             files: [
                 '<%= theme.src %>/js/popup.js'
-            ]
-        },
-        js_setting   : {
-            files: [
-                '<%= theme.src %>/js/setting.js'
             ]
         },
         js_background: {
