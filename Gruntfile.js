@@ -30,9 +30,6 @@ module.exports = function (grunt) {
         configDir: require('path').resolve('grunt')
     });
 
-    // show grunt task time
-    require('time-grunt')(grunt);
-
     grunt.registerTask('dev', [
         'clean',
         'copy',
